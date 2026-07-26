@@ -1,31 +1,25 @@
 // ======================================================
 // BLACK HOLD
-// Aplicación estudiantil
 // Archivo: script.js
+// Versión sin formulario "Agregar tarea"
 // ======================================================
 
 // ======================================================
-// CLAVES DE ALMACENAMIENTO
+// ALMACENAMIENTO
 // ======================================================
 
 const STORAGE_KEYS = {
   tasks: "blackHoldTasks",
-  subjects: "blackHoldSubjects",
   settings: "blackHoldSettings",
   studyTime: "blackHoldStudyTime",
   classroomLinks: "blackHoldClassroomLinks"
 };
 
-// ======================================================
-// CONFIGURACIÓN INICIAL
-// ======================================================
-
 const defaultSettings = {
   name: "Nahiara",
   course: "Estudiante",
   school: "",
-  notifications: true,
-  morningSummary: true
+  notifications: true
 };
 
 const motivationalMessages = [
@@ -38,9 +32,7 @@ const motivationalMessages = [
   "Un pequeño avance sigue siendo un avance.",
   "Concéntrate en una tarea a la vez.",
   "Tus resultados mejoran cuando corriges tus errores.",
-  "Descansar también forma parte de estudiar correctamente.",
-  "No esperes sentirte preparada para comenzar. Comienza y prepárate en el proceso.",
-  "Tu progreso se construye con decisiones pequeñas y constantes."
+  "Descansar también forma parte del estudio."
 ];
 
 // ======================================================
@@ -343,54 +335,44 @@ const preUniversitySchedule = {
 // MATERIAS
 // ======================================================
 
-const defaultSubjects = [
+const subjects = [
   {
-    id: 1,
     name: "Matemáticas",
     confidence: 65,
-    level: "Estoy practicando",
-    color: "blue"
+    level: "Estoy practicando"
   },
   {
-    id: 2,
     name: "Física",
     confidence: 45,
-    level: "Necesito reforzarlo",
-    color: "red"
+    level: "Necesito reforzarlo"
   },
   {
-    id: 3,
     name: "Lenguaje",
     confidence: 70,
-    level: "Estoy practicando",
-    color: "blue"
+    level: "Estoy practicando"
   },
   {
-    id: 4,
     name: "Inglés",
     confidence: 75,
-    level: "Lo manejo bien",
-    color: "green"
+    level: "Lo manejo bien"
   },
   {
-    id: 5,
     name: "Economía",
     confidence: 55,
-    level: "Todavía me cuesta",
-    color: "orange"
+    level: "Todavía me cuesta"
   }
 ];
 
 // ======================================================
-// VARIABLES DE LA APLICACIÓN
+// VARIABLES
 // ======================================================
 
 let currentPage = "home";
 
 let pomodoroInterval = null;
 let pomodoroSeconds = 25 * 60;
-let pomodoroRunning = false;
 let selectedPomodoroMinutes = 25;
+let pomodoroRunning = false;
 
 // ======================================================
 // LOCAL STORAGE
@@ -400,44 +382,37 @@ function getStorage(key, fallback) {
   try {
     const savedValue = localStorage.getItem(key);
 
-    if (!savedValue) {
-      return fallback;
-    }
-
-    return JSON.parse(savedValue);
+    return savedValue
+      ? JSON.parse(savedValue)
+      : fallback;
   } catch (error) {
-    console.error("No se pudieron leer los datos:", error);
+    console.error(error);
     return fallback;
   }
 }
 
 function setStorage(key, value) {
   try {
-    localStorage.setItem(key, JSON.stringify(value));
+    localStorage.setItem(
+      key,
+      JSON.stringify(value)
+    );
   } catch (error) {
-    console.error("No se pudieron guardar los datos:", error);
+    console.error(error);
   }
-}
-
-function getTasks() {
-  return getStorage(STORAGE_KEYS.tasks, []);
-}
-
-function saveTasks(tasks) {
-  setStorage(STORAGE_KEYS.tasks, tasks);
-}
-
-function getSubjects() {
-  return getStorage(
-    STORAGE_KEYS.subjects,
-    defaultSubjects
-  );
 }
 
 function getSettings() {
   return getStorage(
     STORAGE_KEYS.settings,
     defaultSettings
+  );
+}
+
+function getTasks() {
+  return getStorage(
+    STORAGE_KEYS.tasks,
+    []
   );
 }
 
@@ -463,13 +438,16 @@ function capitalize(text) {
   );
 }
 
-function formatCurrentDate(date = new Date()) {
-  return new Intl.DateTimeFormat("es-CL", {
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-    year: "numeric"
-  }).format(date);
+function formatCurrentDate() {
+  return new Intl.DateTimeFormat(
+    "es-CL",
+    {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+      year: "numeric"
+    }
+  ).format(new Date());
 }
 
 function timeToMinutes(time) {
@@ -489,13 +467,6 @@ function getCurrentMinutes() {
   );
 }
 
-function getMinutesDifference(startTime) {
-  return (
-    timeToMinutes(startTime) -
-    getCurrentMinutes()
-  );
-}
-
 function formatRemainingTime(minutes) {
   if (minutes <= 0) {
     return "Comenzando ahora";
@@ -505,8 +476,11 @@ function formatRemainingTime(minutes) {
     return `Faltan ${minutes} minutos`;
   }
 
-  const hours = Math.floor(minutes / 60);
-  const remainingMinutes = minutes % 60;
+  const hours =
+    Math.floor(minutes / 60);
+
+  const remainingMinutes =
+    minutes % 60;
 
   if (remainingMinutes === 0) {
     return `Faltan ${hours} h`;
@@ -516,62 +490,68 @@ function formatRemainingTime(minutes) {
 }
 
 function getDaySchedule() {
-  const day = new Date().getDay();
-
-  return schoolSchedule[day] || [];
+  return (
+    schoolSchedule[
+      new Date().getDay()
+    ] || []
+  );
 }
 
 function getTodayPreUniversity() {
   const today = new Date();
-  const day = today.getDay();
 
   const schedule =
-    preUniversitySchedule[day] || [];
+    preUniversitySchedule[
+      today.getDay()
+    ] || [];
 
   const scienceStartDate =
     new Date("2026-08-03T00:00:00");
 
-  return schedule.filter((classItem) => {
-    if (!classItem.science) {
-      return true;
-    }
+  return schedule.filter(
+    (classItem) => {
+      if (!classItem.science) {
+        return true;
+      }
 
-    return today >= scienceStartDate;
-  });
+      return today >= scienceStartDate;
+    }
+  );
 }
 
 function getNextActivity() {
   const classroomLinks =
     getClassroomLinks();
 
-  const schoolActivities =
-    getDaySchedule().map((item) => ({
-      ...item,
-      type: "Colegio",
-      classroom:
-        classroomLinks[item.name] || ""
-    }));
-
-  const preUniversityActivities =
-    getTodayPreUniversity().map((item) => ({
-      ...item,
-      type: "Preuniversitario",
-      icon: "school",
-      classroom:
-        classroomLinks[item.name] || ""
-    }));
-
   const activities = [
-    ...schoolActivities,
-    ...preUniversityActivities
+    ...getDaySchedule().map(
+      (item) => ({
+        ...item,
+        type: "Colegio",
+        classroom:
+          classroomLinks[item.name] || ""
+      })
+    ),
+
+    ...getTodayPreUniversity().map(
+      (item) => ({
+        ...item,
+        type: "Preuniversitario",
+        icon: "school",
+        classroom:
+          classroomLinks[item.name] || ""
+      })
+    )
   ];
 
-  activities.sort((first, second) => {
-    return (
-      timeToMinutes(first.start) -
-      timeToMinutes(second.start)
-    );
-  });
+  activities.sort(
+    (first, second) => {
+      return (
+        timeToMinutes(first.start) -
+        timeToMinutes(second.start)
+      );
+    }
+  );
 
   const currentMinutes =
     getCurrentMinutes();
@@ -587,14 +567,14 @@ function getNextActivity() {
 }
 
 // ======================================================
-// INICIO DE LA APLICACIÓN
+// INICIO
 // ======================================================
 
 function initializeApp() {
-  const root =
+  const app =
     document.getElementById("app");
 
-  if (!root) {
+  if (!app) {
     console.error(
       'Falta <div id="app"></div> en index.html.'
     );
@@ -613,10 +593,10 @@ function initializeApp() {
 }
 
 function renderApp() {
-  const root =
+  const app =
     document.getElementById("app");
 
-  root.innerHTML = `
+  app.innerHTML = `
     <div class="app-shell">
       <main
         id="page-content"
@@ -624,30 +604,20 @@ function renderApp() {
       ></main>
 
       ${renderBottomNavigation()}
-
-      <button
-        type="button"
-        class="floating-add-button"
-        id="floating-add-button"
-        aria-label="Agregar tarea"
-      >
-        <span class="material-symbols-rounded">
-          add
-        </span>
-      </button>
     </div>
 
-    <div id="modal-container"></div>
     <div id="toast-container"></div>
   `;
 
   renderCurrentPage();
-  attachGlobalEvents();
+  attachNavigationEvents();
 }
 
 function renderCurrentPage() {
   const pageContent =
-    document.getElementById("page-content");
+    document.getElementById(
+      "page-content"
+    );
 
   if (!pageContent) {
     return;
@@ -658,7 +628,7 @@ function renderCurrentPage() {
       pageContent.innerHTML =
         renderCalendarPage();
 
-      attachCalendarEvents();
+      attachHeaderEvents();
       break;
 
     case "tasks":
@@ -697,10 +667,7 @@ function renderCurrentPage() {
 // ENCABEZADO
 // ======================================================
 
-function renderHeader(
-  title = "Black Hold",
-  subtitle = ""
-) {
+function renderHeader(title, subtitle) {
   return `
     <header class="top-header">
       <div>
@@ -717,7 +684,7 @@ function renderHeader(
         type="button"
         class="header-icon-button"
         id="notification-button"
-        aria-label="Activar notificaciones"
+        aria-label="Notificaciones"
       >
         <span class="material-symbols-rounded">
           notifications
@@ -728,28 +695,23 @@ function renderHeader(
 }
 
 // ======================================================
-// PÁGINA DE INICIO
+// PÁGINA HOY
 // ======================================================
 
 function renderHomePage() {
   const settings = getSettings();
-  const tasks = getTasks();
   const nextActivity =
     getNextActivity();
   const todayClasses =
     getDaySchedule();
-
   const pendingTasks =
-    tasks.filter((task) => {
-      return !task.completed;
-    });
+    getTasks().filter(
+      (task) => !task.completed
+    );
 
   const messageIndex =
     new Date().getDate() %
     motivationalMessages.length;
-
-  const motivation =
-    motivationalMessages[messageIndex];
 
   return `
     <section class="page home-page">
@@ -764,7 +726,9 @@ function renderHomePage() {
         </span>
 
         <span>
-          ${capitalize(formatCurrentDate())}
+          ${capitalize(
+            formatCurrentDate()
+          )}
         </span>
       </div>
 
@@ -803,10 +767,7 @@ function renderHomePage() {
           <div class="progress-track">
             <div
               class="progress-fill"
-              style="
-                width:
-                ${calculateDailyProgress()}%;
-              "
+              style="width: ${calculateDailyProgress()}%"
             ></div>
           </div>
         </div>
@@ -833,7 +794,7 @@ function renderHomePage() {
             : renderEmptyCard(
                 "event_available",
                 "No tienes más actividades",
-                "Puedes descansar o adelantar una tarea."
+                "Puedes descansar o comenzar un repaso."
               )
         }
       </section>
@@ -862,7 +823,7 @@ function renderHomePage() {
           </span>
 
           <strong>
-            ¿Qué hago ahora?
+            ¿Qué estudio ahora?
           </strong>
 
           <small>
@@ -873,14 +834,14 @@ function renderHomePage() {
         <button
           type="button"
           class="quick-action-card"
-          data-action="new-task"
+          data-go-page="calendar"
         >
           <span class="material-symbols-rounded">
-            add_task
+            calendar_month
           </span>
 
-          <strong>Nueva tarea</strong>
-          <small>Registrar rápidamente</small>
+          <strong>Calendario</strong>
+          <small>Ver la semana</small>
         </button>
 
         <button
@@ -906,25 +867,15 @@ function renderHomePage() {
 
             <h2>Clases de hoy</h2>
           </div>
-
-          <button
-            type="button"
-            class="text-button"
-            data-go-page="calendar"
-          >
-            Ver calendario
-          </button>
         </div>
 
         <div class="timeline-list">
           ${
             todayClasses.length > 0
               ? todayClasses
-                  .map((classItem) => {
-                    return renderScheduleItem(
-                      classItem
-                    );
-                  })
+                  .map(
+                    renderScheduleItem
+                  )
                   .join("")
               : renderEmptyCard(
                   "weekend",
@@ -948,21 +899,24 @@ function renderHomePage() {
           </p>
 
           <h3>
-            ${escapeHTML(motivation)}
+            ${escapeHTML(
+              motivationalMessages[
+                messageIndex
+              ]
+            )}
           </h3>
         </div>
       </section>
-
-      ${renderPendingTasksPreview()}
     </section>
   `;
 }
 
-function renderNextActivityCard(activity) {
+function renderNextActivityCard(
+  activity
+) {
   const remaining =
-    getMinutesDifference(
-      activity.start
-    );
+    timeToMinutes(activity.start) -
+    getCurrentMinutes();
 
   return `
     <article class="next-class-card">
@@ -992,7 +946,9 @@ function renderNextActivityCard(activity) {
             schedule
           </span>
 
-          ${formatRemainingTime(remaining)}
+          ${formatRemainingTime(
+            remaining
+          )}
         </div>
       </div>
 
@@ -1015,8 +971,7 @@ function renderNextActivityCard(activity) {
               <button
                 type="button"
                 class="small-action-button"
-                data-action="add-classroom"
-                data-subject="${escapeHTML(
+                data-add-classroom="${escapeHTML(
                   activity.name
                 )}"
               >
@@ -1028,8 +983,7 @@ function renderNextActivityCard(activity) {
         <button
           type="button"
           class="small-action-button secondary"
-          data-action="study-subject"
-          data-subject="${escapeHTML(
+          data-study-subject="${escapeHTML(
             activity.name
           )}"
         >
@@ -1040,7 +994,9 @@ function renderNextActivityCard(activity) {
   `;
 }
 
-function renderScheduleItem(classItem) {
+function renderScheduleItem(
+  classItem
+) {
   const currentMinutes =
     getCurrentMinutes();
 
@@ -1084,13 +1040,15 @@ function renderScheduleItem(classItem) {
       <div class="timeline-content">
         <div class="timeline-subject-icon">
           <span class="material-symbols-rounded">
-            ${classItem.icon || "school"}
+            ${classItem.icon}
           </span>
         </div>
 
         <div>
           <h3>
-            ${escapeHTML(classItem.name)}
+            ${escapeHTML(
+              classItem.name
+            )}
           </h3>
 
           <p>
@@ -1112,11 +1070,6 @@ function renderPreUniversitySection() {
   const classes =
     getTodayPreUniversity();
 
-  const today = new Date();
-
-  const scienceStartDate =
-    new Date("2026-08-03T00:00:00");
-
   return `
     <section
       class="section-block"
@@ -1131,30 +1084,6 @@ function renderPreUniversitySection() {
           <h2>Preuniversitario</h2>
         </div>
       </div>
-
-      ${
-        today < scienceStartDate
-          ? `
-            <div class="warning-card">
-              <span class="material-symbols-rounded">
-                info
-              </span>
-
-              <div>
-                <strong>
-                  Cambio temporal de horario
-                </strong>
-
-                <p>
-                  Las clases de Ciencias
-                  comienzan la semana del
-                  3 de agosto.
-                </p>
-              </div>
-            </div>
-          `
-          : ""
-      }
 
       <div class="preu-grid">
         ${
@@ -1180,19 +1109,6 @@ function renderPreUniversitySection() {
                           ${classItem.end}
                         </p>
                       </div>
-
-                      <button
-                        type="button"
-                        class="icon-action-button"
-                        data-action="prepare-preu"
-                        data-subject="${escapeHTML(
-                          classItem.name
-                        )}"
-                      >
-                        <span class="material-symbols-rounded">
-                          arrow_forward
-                        </span>
-                      </button>
                     </article>
                   `;
                 })
@@ -1201,61 +1117,6 @@ function renderPreUniversitySection() {
                 "school",
                 "Sin clases PAES hoy",
                 "Revisa los próximos días en el calendario."
-              )
-        }
-      </div>
-    </section>
-  `;
-}
-
-function renderPendingTasksPreview() {
-  const tasks = getTasks()
-    .filter((task) => {
-      return !task.completed;
-    })
-    .sort((first, second) => {
-      return (
-        new Date(first.date) -
-        new Date(second.date)
-      );
-    })
-    .slice(0, 3);
-
-  return `
-    <section class="section-block">
-      <div class="section-title-row">
-        <div>
-          <p class="section-label">
-            PENDIENTES
-          </p>
-
-          <h2>Próximas tareas</h2>
-        </div>
-
-        <button
-          type="button"
-          class="text-button"
-          data-go-page="tasks"
-        >
-          Ver todas
-        </button>
-      </div>
-
-      <div class="task-preview-list">
-        ${
-          tasks.length > 0
-            ? tasks
-                .map((task) => {
-                  return renderTaskCard(
-                    task,
-                    true
-                  );
-                })
-                .join("")
-            : renderEmptyCard(
-                "task_alt",
-                "Todo al día",
-                "No tienes tareas pendientes registradas."
               )
         }
       </div>
@@ -1282,12 +1143,9 @@ function calculateDailyProgress() {
       );
     }).length;
 
-  return Math.min(
-    100,
-    Math.round(
-      (completed / schedule.length) *
-        100
-    )
+  return Math.round(
+    (completed / schedule.length) *
+      100
   );
 }
 
@@ -1325,24 +1183,6 @@ function renderCalendarPage() {
         "Calendario",
         "TU SEMANA"
       )}
-
-      <div class="calendar-tabs">
-        <button
-          type="button"
-          class="calendar-tab active"
-          data-calendar-view="week"
-        >
-          Semana
-        </button>
-
-        <button
-          type="button"
-          class="calendar-tab"
-          data-calendar-view="day"
-        >
-          Día
-        </button>
-      </div>
 
       <div class="week-calendar">
         ${days
@@ -1393,33 +1233,31 @@ function renderCalendarPage() {
                     })
                     .join("")}
 
-                  ${
-                    preUniversitySchedule[
-                      day.number
-                    ]
-                      ?.map((item) => {
-                        return `
-                          <article class="calendar-event preu-event">
-                            <div class="calendar-event-time">
-                              ${item.start}
-                            </div>
+                  ${preUniversitySchedule[
+                    day.number
+                  ]
+                    .map((item) => {
+                      return `
+                        <article class="calendar-event preu-event">
+                          <div class="calendar-event-time">
+                            ${item.start}
+                          </div>
 
-                            <div class="calendar-event-content">
-                              <strong>
-                                ${escapeHTML(
-                                  item.name
-                                )}
-                              </strong>
+                          <div class="calendar-event-content">
+                            <strong>
+                              ${escapeHTML(
+                                item.name
+                              )}
+                            </strong>
 
-                              <span>
-                                Preuniversitario PAES
-                              </span>
-                            </div>
-                          </article>
-                        `;
-                      })
-                      .join("") || ""
-                  }
+                            <span>
+                              Preuniversitario PAES
+                            </span>
+                          </div>
+                        </article>
+                      `;
+                    })
+                    .join("")}
                 </div>
               </section>
             `;
@@ -1431,59 +1269,51 @@ function renderCalendarPage() {
 }
 
 // ======================================================
-// TAREAS
+// TAREAS SIN OPCIÓN DE AGREGAR
 // ======================================================
 
 function renderTasksPage() {
-  const tasks = getTasks().sort(
-    (first, second) => {
-      if (
-        first.completed !==
-        second.completed
-      ) {
-        return (
-          Number(first.completed) -
-          Number(second.completed)
-        );
-      }
-
-      return (
-        new Date(first.date) -
-        new Date(second.date)
-      );
-    }
-  );
-
-  const pending =
-    tasks.filter((task) => {
-      return !task.completed;
-    }).length;
-
-  const completed =
-    tasks.filter((task) => {
-      return task.completed;
-    }).length;
+  const tasks = getTasks();
 
   return `
     <section class="page tasks-page">
       ${renderHeader(
         "Tareas",
-        "ORGANIZA TU TRABAJO"
+        "MIS PENDIENTES"
       )}
 
       <div class="task-statistics">
         <article>
-          <strong>${pending}</strong>
+          <strong>
+            ${
+              tasks.filter(
+                (task) =>
+                  !task.completed
+              ).length
+            }
+          </strong>
+
           <span>Pendientes</span>
         </article>
 
         <article>
-          <strong>${completed}</strong>
+          <strong>
+            ${
+              tasks.filter(
+                (task) =>
+                  task.completed
+              ).length
+            }
+          </strong>
+
           <span>Terminadas</span>
         </article>
 
         <article>
-          <strong>${tasks.length}</strong>
+          <strong>
+            ${tasks.length}
+          </strong>
+
           <span>Total</span>
         </article>
       </div>
@@ -1496,34 +1326,18 @@ function renderTasksPage() {
 
           <h2>Mis tareas</h2>
         </div>
-
-        <button
-          type="button"
-          class="primary-small-button"
-          id="new-task-button"
-        >
-          <span class="material-symbols-rounded">
-            add
-          </span>
-
-          Nueva
-        </button>
       </div>
 
       <div class="task-list">
         ${
           tasks.length > 0
             ? tasks
-                .map((task) => {
-                  return renderTaskCard(
-                    task
-                  );
-                })
+                .map(renderTaskCard)
                 .join("")
             : renderEmptyCard(
-                "assignment",
+                "task_alt",
                 "No hay tareas registradas",
-                "Presiona Nueva para agregar tu primera tarea."
+                "La sección para agregar tareas fue retirada."
               )
         }
       </div>
@@ -1531,31 +1345,19 @@ function renderTasksPage() {
   `;
 }
 
-function renderTaskCard(
-  task,
-  compact = false
-) {
-  const daysRemaining =
-    calculateDaysRemaining(task.date);
-
-  const safeLink =
-    isValidHttpUrl(task.link)
-      ? escapeHTML(task.link)
-      : "";
-
+function renderTaskCard(task) {
   return `
     <article
-      class="
-        task-card
-        ${task.completed ? "completed" : ""}
-        ${compact ? "compact" : ""}
-      "
+      class="task-card ${
+        task.completed
+          ? "completed"
+          : ""
+      }"
     >
       <button
         type="button"
         class="task-check-button"
         data-task-complete="${task.id}"
-        aria-label="Cambiar estado"
       >
         <span class="material-symbols-rounded">
           ${
@@ -1567,25 +1369,16 @@ function renderTaskCard(
       </button>
 
       <div class="task-card-content">
-        <div class="task-card-heading">
-          <span class="subject-chip">
-            ${escapeHTML(task.subject)}
-          </span>
-
-          <span
-            class="
-              priority-chip
-              priority-${escapeHTML(
-                task.priority
-              )}
-            "
-          >
-            ${capitalize(task.priority)}
-          </span>
-        </div>
+        <span class="subject-chip">
+          ${escapeHTML(
+            task.subject || "General"
+          )}
+        </span>
 
         <h3>
-          ${escapeHTML(task.title)}
+          ${escapeHTML(
+            task.title || "Tarea"
+          )}
         </h3>
 
         ${
@@ -1599,119 +1392,78 @@ function renderTaskCard(
             `
             : ""
         }
-
-        <div class="task-meta">
-          <span>
-            <span class="material-symbols-rounded">
-              calendar_today
-            </span>
-
-            ${formatTaskDate(task.date)}
-          </span>
-
-          <span>
-            ${
-              daysRemaining < 0
-                ? "Atrasada"
-                : daysRemaining === 0
-                ? "Vence hoy"
-                : `Faltan ${daysRemaining} días`
-            }
-          </span>
-        </div>
-
-        ${
-          safeLink
-            ? `
-              <a
-                href="${safeLink}"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="task-link-button"
-              >
-                <span class="material-symbols-rounded">
-                  link
-                </span>
-
-                Abrir material
-              </a>
-            `
-            : ""
-        }
       </div>
 
-      ${
-        compact
-          ? ""
-          : `
-            <button
-              type="button"
-              class="task-delete-button"
-              data-task-delete="${task.id}"
-              aria-label="Eliminar tarea"
-            >
-              <span class="material-symbols-rounded">
-                delete
-              </span>
-            </button>
-          `
-      }
+      <button
+        type="button"
+        class="task-delete-button"
+        data-task-delete="${task.id}"
+      >
+        <span class="material-symbols-rounded">
+          delete
+        </span>
+      </button>
     </article>
   `;
 }
 
-function calculateDaysRemaining(
-  dateString
-) {
-  if (!dateString) {
-    return 0;
-  }
+function toggleTask(taskId) {
+  const tasks =
+    getTasks().map((task) => {
+      if (
+        String(task.id) ===
+        String(taskId)
+      ) {
+        return {
+          ...task,
+          completed:
+            !task.completed
+        };
+      }
 
-  const today = new Date();
+      return task;
+    });
 
-  const targetDate =
-    new Date(
-      `${dateString}T12:00:00`
-    );
-
-  today.setHours(0, 0, 0, 0);
-  targetDate.setHours(0, 0, 0, 0);
-
-  return Math.ceil(
-    (
-      targetDate.getTime() -
-      today.getTime()
-    ) / 86400000
+  setStorage(
+    STORAGE_KEYS.tasks,
+    tasks
   );
+
+  renderCurrentPage();
 }
 
-function formatTaskDate(dateString) {
-  if (!dateString) {
-    return "Sin fecha";
-  }
-
-  const date =
-    new Date(
-      `${dateString}T12:00:00`
+function deleteTask(taskId) {
+  const confirmed =
+    window.confirm(
+      "¿Quieres eliminar esta tarea?"
     );
 
-  return new Intl.DateTimeFormat(
-    "es-CL",
-    {
-      day: "numeric",
-      month: "short"
-    }
-  ).format(date);
+  if (!confirmed) {
+    return;
+  }
+
+  const tasks =
+    getTasks().filter((task) => {
+      return (
+        String(task.id) !==
+        String(taskId)
+      );
+    });
+
+  setStorage(
+    STORAGE_KEYS.tasks,
+    tasks
+  );
+
+  showToast("Tarea eliminada.");
+  renderCurrentPage();
 }
 
 // ======================================================
-// PÁGINA DE ESTUDIO
+// ESTUDIAR
 // ======================================================
 
 function renderStudyPage() {
-  const subjects =
-    getSubjects();
-
   return `
     <section class="page study-page">
       ${renderHeader(
@@ -1782,7 +1534,7 @@ function renderStudyPage() {
           class="pomodoro-status"
           id="pomodoro-status"
         >
-          Elige una materia y comienza.
+          Selecciona una materia.
         </p>
 
         <select
@@ -1816,10 +1568,6 @@ function renderStudyPage() {
             class="primary-button"
             id="pomodoro-start"
           >
-            <span class="material-symbols-rounded">
-              play_arrow
-            </span>
-
             Comenzar
           </button>
 
@@ -1834,16 +1582,6 @@ function renderStudyPage() {
       </section>
 
       <section class="section-block">
-        <div class="section-title-row">
-          <div>
-            <p class="section-label">
-              REFUERZO
-            </p>
-
-            <h2>Mis materias</h2>
-          </div>
-        </div>
-
         <div class="subjects-grid">
           ${subjects
             .map((subject) => {
@@ -1871,14 +1609,8 @@ function renderStudyPage() {
 
                   <div class="progress-track">
                     <div
-                      class="
-                        progress-fill
-                        subject-${subject.color}
-                      "
-                      style="
-                        width:
-                        ${subject.confidence}%;
-                      "
+                      class="progress-fill"
+                      style="width: ${subject.confidence}%"
                     ></div>
                   </div>
 
@@ -1901,33 +1633,34 @@ function renderStudyPage() {
   `;
 }
 
-function formatTimer(totalSeconds) {
+function formatTimer(seconds) {
   const minutes =
-    Math.floor(
-      totalSeconds / 60
-    );
+    Math.floor(seconds / 60);
 
-  const seconds =
-    totalSeconds % 60;
+  const remainingSeconds =
+    seconds % 60;
 
-  return `
-    ${String(minutes).padStart(2, "0")}:
-    ${String(seconds).padStart(2, "0")}
-  `.replace(/\s/g, "");
+  return (
+    String(minutes).padStart(
+      2,
+      "0"
+    ) +
+    ":" +
+    String(
+      remainingSeconds
+    ).padStart(2, "0")
+  );
 }
 
 function startPomodoro() {
-  const subjectSelect =
+  const subject =
     document.getElementById(
       "pomodoro-subject"
-    );
+    )?.value;
 
-  const selectedSubject =
-    subjectSelect?.value;
-
-  if (!selectedSubject) {
+  if (!subject) {
     showToast(
-      "Selecciona una materia antes de comenzar."
+      "Selecciona una materia."
     );
 
     return;
@@ -1940,29 +1673,13 @@ function startPomodoro() {
 
   pomodoroRunning = true;
 
-  const startButton =
+  const button =
     document.getElementById(
       "pomodoro-start"
     );
 
-  const status =
-    document.getElementById(
-      "pomodoro-status"
-    );
-
-  if (startButton) {
-    startButton.innerHTML = `
-      <span class="material-symbols-rounded">
-        pause
-      </span>
-
-      Pausar
-    `;
-  }
-
-  if (status) {
-    status.textContent =
-      `Estudiando ${selectedSubject}`;
+  if (button) {
+    button.textContent = "Pausar";
   }
 
   pomodoroInterval =
@@ -1982,9 +1699,7 @@ function startPomodoro() {
       }
 
       if (pomodoroSeconds <= 0) {
-        completePomodoro(
-          selectedSubject
-        );
+        completePomodoro(subject);
       }
     }, 1000);
 }
@@ -1996,29 +1711,13 @@ function pausePomodoro() {
     pomodoroInterval
   );
 
-  const startButton =
+  const button =
     document.getElementById(
       "pomodoro-start"
     );
 
-  const status =
-    document.getElementById(
-      "pomodoro-status"
-    );
-
-  if (startButton) {
-    startButton.innerHTML = `
-      <span class="material-symbols-rounded">
-        play_arrow
-      </span>
-
-      Continuar
-    `;
-  }
-
-  if (status) {
-    status.textContent =
-      "Sesión pausada";
+  if (button) {
+    button.textContent = "Continuar";
   }
 }
 
@@ -2037,12 +1736,7 @@ function resetPomodoro() {
       "pomodoro-clock"
     );
 
-  const status =
-    document.getElementById(
-      "pomodoro-status"
-    );
-
-  const startButton =
+  const button =
     document.getElementById(
       "pomodoro-start"
     );
@@ -2054,19 +1748,8 @@ function resetPomodoro() {
       );
   }
 
-  if (status) {
-    status.textContent =
-      "Elige una materia y comienza.";
-  }
-
-  if (startButton) {
-    startButton.innerHTML = `
-      <span class="material-symbols-rounded">
-        play_arrow
-      </span>
-
-      Comenzar
-    `;
+  if (button) {
+    button.textContent = "Comenzar";
   }
 }
 
@@ -2075,9 +1758,7 @@ function completePomodoro(subject) {
     pomodoroInterval
   );
 
-  pomodoroRunning = false;
-
-  const totalStudyTime =
+  const currentStudyTime =
     getStorage(
       STORAGE_KEYS.studyTime,
       0
@@ -2085,7 +1766,7 @@ function completePomodoro(subject) {
 
   setStorage(
     STORAGE_KEYS.studyTime,
-    totalStudyTime +
+    currentStudyTime +
       selectedPomodoroMinutes
   );
 
@@ -2104,19 +1785,11 @@ function renderProfilePage() {
   const settings =
     getSettings();
 
-  const totalStudyTime =
+  const studyTime =
     getStorage(
       STORAGE_KEYS.studyTime,
       0
     );
-
-  const tasks =
-    getTasks();
-
-  const completedTasks =
-    tasks.filter((task) => {
-      return task.completed;
-    }).length;
 
   return `
     <section class="page profile-page">
@@ -2136,11 +1809,15 @@ function renderProfilePage() {
 
         <div>
           <h2>
-            ${escapeHTML(settings.name)}
+            ${escapeHTML(
+              settings.name
+            )}
           </h2>
 
           <p>
-            ${escapeHTML(settings.course)}
+            ${escapeHTML(
+              settings.course
+            )}
           </p>
         </div>
       </section>
@@ -2148,21 +1825,11 @@ function renderProfilePage() {
       <section class="profile-statistics">
         <article>
           <strong>
-            ${totalStudyTime}
+            ${studyTime}
           </strong>
 
           <span>
             Minutos estudiados
-          </span>
-        </article>
-
-        <article>
-          <strong>
-            ${completedTasks}
-          </strong>
-
-          <span>
-            Tareas terminadas
           </span>
         </article>
       </section>
@@ -2182,7 +1849,6 @@ function renderProfilePage() {
             value="${escapeHTML(
               settings.name
             )}"
-            required
           />
         </div>
 
@@ -2200,44 +1866,6 @@ function renderProfilePage() {
           />
         </div>
 
-        <div class="form-group">
-          <label for="profile-school">
-            Colegio
-          </label>
-
-          <input
-            id="profile-school"
-            type="text"
-            value="${escapeHTML(
-              settings.school
-            )}"
-          />
-        </div>
-
-        <label class="setting-switch">
-          <div>
-            <strong>
-              Notificaciones
-            </strong>
-
-            <span>
-              Recordatorios de clases y tareas
-            </span>
-          </div>
-
-          <input
-            id="profile-notifications"
-            type="checkbox"
-            ${
-              settings.notifications
-                ? "checked"
-                : ""
-            }
-          />
-
-          <span class="switch-slider"></span>
-        </label>
-
         <button
           type="submit"
           class="primary-button full-width"
@@ -2245,14 +1873,6 @@ function renderProfilePage() {
           Guardar cambios
         </button>
       </form>
-
-      <button
-        type="button"
-        class="danger-button"
-        id="clear-data-button"
-      >
-        Borrar todos los datos
-      </button>
     </section>
   `;
 }
@@ -2312,695 +1932,16 @@ function renderNavButton(
         ${icon}
       </span>
 
-      <span>
-        ${label}
-      </span>
+      <span>${label}</span>
     </button>
   `;
 }
 
-function updateNavigationState() {
+function attachNavigationEvents() {
   document
-    .querySelectorAll(".nav-button")
-    .forEach((button) => {
-      button.classList.toggle(
-        "active",
-        button.dataset.page ===
-          currentPage
-      );
-    });
-
-  const floatingButton =
-    document.getElementById(
-      "floating-add-button"
-    );
-
-  if (floatingButton) {
-    floatingButton.style.display =
-      currentPage === "tasks" ||
-      currentPage === "home"
-        ? "flex"
-        : "none";
-  }
-}
-
-// ======================================================
-// MODAL PARA AGREGAR TAREA
-// CORREGIDO: LA X AHORA CIERRA CORRECTAMENTE
-// ======================================================
-
-function openTaskModal() {
-  const modalContainer =
-    document.getElementById(
-      "modal-container"
-    );
-
-  if (!modalContainer) {
-    console.error(
-      "No se encontró modal-container."
-    );
-
-    return;
-  }
-
-  modalContainer.innerHTML = `
-    <div
-      class="modal-overlay"
-      id="task-modal-overlay"
-    >
-      <section
-        class="app-modal"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="task-modal-title"
-      >
-        <div class="modal-header">
-          <div>
-            <p class="section-label">
-              NUEVO PENDIENTE
-            </p>
-
-            <h2 id="task-modal-title">
-              Agregar tarea
-            </h2>
-          </div>
-
-          <button
-            type="button"
-            class="modal-close-button"
-            id="close-task-modal"
-            aria-label="Cerrar ventana"
-          >
-            <span class="material-symbols-rounded">
-              close
-            </span>
-          </button>
-        </div>
-
-        <form id="task-form">
-          <div class="form-group">
-            <label for="task-title">
-              Nombre de la tarea
-            </label>
-
-            <input
-              id="task-title"
-              type="text"
-              placeholder="Ejemplo: Guía de Física"
-              autocomplete="off"
-              required
-            />
-          </div>
-
-          <div class="form-group">
-            <label for="task-subject">
-              Asignatura
-            </label>
-
-            <select
-              id="task-subject"
-              required
-            >
-              <option value="">
-                Seleccionar asignatura
-              </option>
-
-              <option value="Matemáticas">
-                Matemáticas
-              </option>
-
-              <option value="Física">
-                Física
-              </option>
-
-              <option value="Lenguaje">
-                Lenguaje
-              </option>
-
-              <option value="Inglés">
-                Inglés
-              </option>
-
-              <option value="Economía">
-                Economía
-              </option>
-
-              <option value="Teatro">
-                Teatro
-              </option>
-
-              <option value="Educación Ciudadana">
-                Educación Ciudadana
-              </option>
-
-              <option value="Teoría del Conocimiento">
-                Teoría del Conocimiento
-              </option>
-
-              <option value="Química">
-                Química
-              </option>
-
-              <option value="Historia">
-                Historia
-              </option>
-
-              <option value="Comprensión Lectora">
-                Comprensión Lectora
-              </option>
-
-              <option value="Matemática M1">
-                Matemática M1
-              </option>
-
-              <option value="Otra">
-                Otra
-              </option>
-            </select>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label for="task-date">
-                Fecha de entrega
-              </label>
-
-              <input
-                id="task-date"
-                type="date"
-                required
-              />
-            </div>
-
-            <div class="form-group">
-              <label for="task-priority">
-                Prioridad
-              </label>
-
-              <select id="task-priority">
-                <option value="media">
-                  Media
-                </option>
-
-                <option value="urgente">
-                  Urgente
-                </option>
-
-                <option value="alta">
-                  Alta
-                </option>
-
-                <option value="baja">
-                  Baja
-                </option>
-              </select>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label for="task-description">
-              Descripción
-            </label>
-
-            <textarea
-              id="task-description"
-              rows="4"
-              placeholder="Agrega instrucciones o detalles"
-            ></textarea>
-          </div>
-
-          <div class="form-group">
-            <label for="task-link">
-              Enlace
-            </label>
-
-            <input
-              id="task-link"
-              type="url"
-              placeholder="Classroom, guía o material"
-            />
-          </div>
-
-          <button
-            type="submit"
-            class="primary-button full-width"
-          >
-            Guardar tarea
-          </button>
-        </form>
-      </section>
-    </div>
-  `;
-
-  document.body.classList.add(
-    "modal-open"
-  );
-
-  const closeButton =
-    document.getElementById(
-      "close-task-modal"
-    );
-
-  const overlay =
-    document.getElementById(
-      "task-modal-overlay"
-    );
-
-  const modal =
-    overlay?.querySelector(
-      ".app-modal"
-    );
-
-  const taskForm =
-    document.getElementById(
-      "task-form"
-    );
-
-  const titleInput =
-    document.getElementById(
-      "task-title"
-    );
-
-  // Cerrar usando la cruz.
-  closeButton?.addEventListener(
-    "click",
-    (event) => {
-      event.preventDefault();
-      event.stopPropagation();
-
-      closeTaskModal();
-    }
-  );
-
-  // Cerrar haciendo clic en el fondo.
-  overlay?.addEventListener(
-    "click",
-    (event) => {
-      if (event.target === overlay) {
-        closeTaskModal();
-      }
-    }
-  );
-
-  // Evita cerrar al hacer clic dentro.
-  modal?.addEventListener(
-    "click",
-    (event) => {
-      event.stopPropagation();
-    }
-  );
-
-  taskForm?.addEventListener(
-    "submit",
-    createTask
-  );
-
-  setTimeout(() => {
-    titleInput?.focus();
-  }, 100);
-}
-
-function closeTaskModal() {
-  const modalContainer =
-    document.getElementById(
-      "modal-container"
-    );
-
-  if (modalContainer) {
-    modalContainer.innerHTML = "";
-  }
-
-  document.body.classList.remove(
-    "modal-open"
-  );
-}
-
-function closeTaskModalWithEscape(
-  event
-) {
-  if (event.key !== "Escape") {
-    return;
-  }
-
-  const modal =
-    document.getElementById(
-      "task-modal-overlay"
-    );
-
-  if (modal) {
-    closeTaskModal();
-  }
-}
-
-function createTask(event) {
-  event.preventDefault();
-
-  const titleInput =
-    document.getElementById(
-      "task-title"
-    );
-
-  const subjectInput =
-    document.getElementById(
-      "task-subject"
-    );
-
-  const descriptionInput =
-    document.getElementById(
-      "task-description"
-    );
-
-  const dateInput =
-    document.getElementById(
-      "task-date"
-    );
-
-  const priorityInput =
-    document.getElementById(
-      "task-priority"
-    );
-
-  const linkInput =
-    document.getElementById(
-      "task-link"
-    );
-
-  const title =
-    titleInput?.value.trim() || "";
-
-  const subject =
-    subjectInput?.value || "";
-
-  const description =
-    descriptionInput?.value.trim() ||
-    "";
-
-  const date =
-    dateInput?.value || "";
-
-  const priority =
-    priorityInput?.value || "media";
-
-  const link =
-    linkInput?.value.trim() || "";
-
-  if (!title) {
-    showToast(
-      "Escribe el nombre de la tarea."
-    );
-
-    titleInput?.focus();
-    return;
-  }
-
-  if (!subject) {
-    showToast(
-      "Selecciona una asignatura."
-    );
-
-    subjectInput?.focus();
-    return;
-  }
-
-  if (!date) {
-    showToast(
-      "Selecciona una fecha de entrega."
-    );
-
-    dateInput?.focus();
-    return;
-  }
-
-  if (
-    link &&
-    !isValidHttpUrl(link)
-  ) {
-    showToast(
-      "El enlace debe comenzar con http:// o https://"
-    );
-
-    linkInput?.focus();
-    return;
-  }
-
-  const tasks = getTasks();
-
-  tasks.push({
-    id: Date.now(),
-    title,
-    subject,
-    description,
-    date,
-    priority,
-    link,
-    completed: false,
-    createdAt:
-      new Date().toISOString()
-  });
-
-  saveTasks(tasks);
-
-  closeTaskModal();
-
-  showToast(
-    "Tarea guardada correctamente."
-  );
-
-  renderCurrentPage();
-}
-
-function toggleTask(taskId) {
-  const tasks =
-    getTasks().map((task) => {
-      if (
-        String(task.id) ===
-        String(taskId)
-      ) {
-        return {
-          ...task,
-          completed:
-            !task.completed
-        };
-      }
-
-      return task;
-    });
-
-  saveTasks(tasks);
-  renderCurrentPage();
-}
-
-function deleteTask(taskId) {
-  const confirmed =
-    window.confirm(
-      "¿Seguro que quieres eliminar esta tarea?"
-    );
-
-  if (!confirmed) {
-    return;
-  }
-
-  const tasks =
-    getTasks().filter((task) => {
-      return (
-        String(task.id) !==
-        String(taskId)
-      );
-    });
-
-  saveTasks(tasks);
-
-  showToast(
-    "Tarea eliminada."
-  );
-
-  renderCurrentPage();
-}
-
-// ======================================================
-// RECOMENDACIÓN
-// ======================================================
-
-function recommendTask() {
-  const priorityOrder = {
-    urgente: 1,
-    alta: 2,
-    media: 3,
-    baja: 4
-  };
-
-  const pendingTasks =
-    getTasks()
-      .filter((task) => {
-        return !task.completed;
-      })
-      .sort((first, second) => {
-        const priorityDifference =
-          priorityOrder[
-            first.priority
-          ] -
-          priorityOrder[
-            second.priority
-          ];
-
-        if (
-          priorityDifference !== 0
-        ) {
-          return priorityDifference;
-        }
-
-        return (
-          new Date(first.date) -
-          new Date(second.date)
-        );
-      });
-
-  if (
-    pendingTasks.length === 0
-  ) {
-    showRecommendationModal(
-      "No tienes tareas pendientes",
-      "Puedes hacer un repaso de Física o Matemáticas durante 20 minutos."
-    );
-
-    return;
-  }
-
-  const task =
-    pendingTasks[0];
-
-  const daysRemaining =
-    calculateDaysRemaining(
-      task.date
-    );
-
-  const urgencyMessage =
-    daysRemaining <= 1
-      ? "Esta tarea tiene una fecha de entrega muy cercana."
-      : `Faltan ${daysRemaining} días para la entrega.`;
-
-  showRecommendationModal(
-    `Trabaja en ${task.title}`,
-    `Dedica 25 minutos a ${task.subject}. ${urgencyMessage}`
-  );
-}
-
-function showRecommendationModal(
-  title,
-  message
-) {
-  const modalContainer =
-    document.getElementById(
-      "modal-container"
-    );
-
-  if (!modalContainer) {
-    return;
-  }
-
-  modalContainer.innerHTML = `
-    <div
-      class="modal-overlay"
-      id="recommendation-overlay"
-    >
-      <section
-        class="
-          app-modal
-          recommendation-modal
-        "
-      >
-        <div class="recommendation-icon">
-          <span class="material-symbols-rounded">
-            auto_awesome
-          </span>
-        </div>
-
-        <p class="section-label">
-          RECOMENDACIÓN
-        </p>
-
-        <h2>
-          ${escapeHTML(title)}
-        </h2>
-
-        <p>
-          ${escapeHTML(message)}
-        </p>
-
-        <button
-          type="button"
-          class="primary-button full-width"
-          id="accept-recommendation"
-        >
-          Comenzar ahora
-        </button>
-
-        <button
-          type="button"
-          class="secondary-button full-width"
-          id="close-recommendation"
-        >
-          Cerrar
-        </button>
-      </section>
-    </div>
-  `;
-
-  document.body.classList.add(
-    "modal-open"
-  );
-
-  const overlay =
-    document.getElementById(
-      "recommendation-overlay"
-    );
-
-  const closeButton =
-    document.getElementById(
-      "close-recommendation"
-    );
-
-  const acceptButton =
-    document.getElementById(
-      "accept-recommendation"
-    );
-
-  overlay?.addEventListener(
-    "click",
-    (event) => {
-      if (event.target === overlay) {
-        closeTaskModal();
-      }
-    }
-  );
-
-  closeButton?.addEventListener(
-    "click",
-    closeTaskModal
-  );
-
-  acceptButton?.addEventListener(
-    "click",
-    () => {
-      closeTaskModal();
-
-      currentPage = "study";
-
-      selectedPomodoroMinutes = 25;
-      pomodoroSeconds = 25 * 60;
-
-      renderCurrentPage();
-    }
-  );
-}
-
-// ======================================================
-// EVENTOS GENERALES
-// ======================================================
-
-function attachGlobalEvents() {
-  document
-    .querySelectorAll(".nav-button")
+    .querySelectorAll(
+      ".nav-button"
+    )
     .forEach((button) => {
       button.addEventListener(
         "click",
@@ -3017,14 +1958,34 @@ function attachGlobalEvents() {
         }
       );
     });
+}
 
+function updateNavigationState() {
+  document
+    .querySelectorAll(
+      ".nav-button"
+    )
+    .forEach((button) => {
+      button.classList.toggle(
+        "active",
+        button.dataset.page ===
+          currentPage
+      );
+    });
+}
+
+// ======================================================
+// EVENTOS
+// ======================================================
+
+function attachHeaderEvents() {
   document
     .getElementById(
-      "floating-add-button"
+      "notification-button"
     )
     ?.addEventListener(
       "click",
-      openTaskModal
+      requestNotifications
     );
 
   document
@@ -3039,25 +2000,9 @@ function attachGlobalEvents() {
             button.dataset.goPage;
 
           renderCurrentPage();
-
-          window.scrollTo({
-            top: 0,
-            behavior: "smooth"
-          });
         }
       );
     });
-}
-
-function attachHeaderEvents() {
-  document
-    .getElementById(
-      "notification-button"
-    )
-    ?.addEventListener(
-      "click",
-      requestNotifications
-    );
 }
 
 function attachHomeEvents() {
@@ -3081,16 +2026,11 @@ function attachHomeEvents() {
     )
     ?.addEventListener(
       "click",
-      recommendTask
-    );
-
-  document
-    .querySelector(
-      '[data-action="new-task"]'
-    )
-    ?.addEventListener(
-      "click",
-      openTaskModal
+      () => {
+        showToast(
+          "Te recomiendo estudiar Física durante 25 minutos."
+        );
+      }
     );
 
   document
@@ -3112,15 +2052,15 @@ function attachHomeEvents() {
 
   document
     .querySelectorAll(
-      "[data-task-complete]"
+      "[data-add-classroom]"
     )
     .forEach((button) => {
       button.addEventListener(
         "click",
         () => {
-          toggleTask(
+          saveClassroomLink(
             button.dataset
-              .taskComplete
+              .addClassroom
           );
         }
       );
@@ -3128,17 +2068,13 @@ function attachHomeEvents() {
 
   document
     .querySelectorAll(
-      '[data-action="study-subject"]'
+      "[data-study-subject]"
     )
     .forEach((button) => {
       button.addEventListener(
         "click",
         () => {
-          const subject =
-            button.dataset.subject;
-
           currentPage = "study";
-
           renderCurrentPage();
 
           const select =
@@ -3147,75 +2083,9 @@ function attachHomeEvents() {
             );
 
           if (select) {
-            select.value = subject;
-          }
-        }
-      );
-    });
-
-  document
-    .querySelectorAll(
-      '[data-action="prepare-preu"]'
-    )
-    .forEach((button) => {
-      button.addEventListener(
-        "click",
-        () => {
-          showToast(
-            `Prepárate para ${button.dataset.subject}: revisa tu guía y materiales.`
-          );
-        }
-      );
-    });
-
-  document
-    .querySelectorAll(
-      '[data-action="add-classroom"]'
-    )
-    .forEach((button) => {
-      button.addEventListener(
-        "click",
-        () => {
-          saveClassroomLink(
-            button.dataset.subject
-          );
-        }
-      );
-    });
-}
-
-function attachCalendarEvents() {
-  attachHeaderEvents();
-
-  document
-    .querySelectorAll(
-      ".calendar-tab"
-    )
-    .forEach((button) => {
-      button.addEventListener(
-        "click",
-        () => {
-          document
-            .querySelectorAll(
-              ".calendar-tab"
-            )
-            .forEach((tab) => {
-              tab.classList.remove(
-                "active"
-              );
-            });
-
-          button.classList.add(
-            "active"
-          );
-
-          if (
-            button.dataset
-              .calendarView === "day"
-          ) {
-            showToast(
-              "La vista diaria está disponible en la pantalla Hoy."
-            );
+            select.value =
+              button.dataset
+                .studySubject;
           }
         }
       );
@@ -3224,15 +2094,6 @@ function attachCalendarEvents() {
 
 function attachTaskEvents() {
   attachHeaderEvents();
-
-  document
-    .getElementById(
-      "new-task-button"
-    )
-    ?.addEventListener(
-      "click",
-      openTaskModal
-    );
 
   document
     .querySelectorAll(
@@ -3278,20 +2139,6 @@ function attachStudyEvents() {
       button.addEventListener(
         "click",
         () => {
-          document
-            .querySelectorAll(
-              ".pomodoro-mode"
-            )
-            .forEach((item) => {
-              item.classList.remove(
-                "active"
-              );
-            });
-
-          button.classList.add(
-            "active"
-          );
-
           selectedPomodoroMinutes =
             Number(
               button.dataset.minutes
@@ -3301,25 +2148,8 @@ function attachStudyEvents() {
             selectedPomodoroMinutes *
             60;
 
-          if (pomodoroRunning) {
-            clearInterval(
-              pomodoroInterval
-            );
-
-            pomodoroRunning = false;
-          }
-
-          const clock =
-            document.getElementById(
-              "pomodoro-clock"
-            );
-
-          if (clock) {
-            clock.textContent =
-              formatTimer(
-                pomodoroSeconds
-              );
-          }
+          resetPomodoro();
+          renderCurrentPage();
         }
       );
     });
@@ -3360,18 +2190,6 @@ function attachStudyEvents() {
               button.dataset
                 .studySubject;
           }
-
-          document
-            .querySelector(
-              ".pomodoro-card"
-            )
-            ?.scrollIntoView({
-              behavior: "smooth"
-            });
-
-          showToast(
-            `${button.dataset.studySubject} seleccionada para estudiar.`
-          );
         }
       );
     });
@@ -3389,39 +2207,24 @@ function attachProfileEvents() {
       (event) => {
         event.preventDefault();
 
-        const name =
-          document
-            .getElementById(
-              "profile-name"
-            )
-            ?.value.trim() ||
-          "Estudiante";
-
-        const course =
-          document
-            .getElementById(
-              "profile-course"
-            )
-            ?.value.trim() || "";
-
-        const school =
-          document
-            .getElementById(
-              "profile-school"
-            )
-            ?.value.trim() || "";
-
-        const notifications =
-          document.getElementById(
-            "profile-notifications"
-          )?.checked || false;
-
         const settings = {
           ...getSettings(),
-          name,
-          course,
-          school,
-          notifications
+
+          name:
+            document
+              .getElementById(
+                "profile-name"
+              )
+              ?.value.trim() ||
+            "Estudiante",
+
+          course:
+            document
+              .getElementById(
+                "profile-course"
+              )
+              ?.value.trim() ||
+            ""
         };
 
         setStorage(
@@ -3430,39 +2233,7 @@ function attachProfileEvents() {
         );
 
         showToast(
-          "Perfil guardado correctamente."
-        );
-
-        renderCurrentPage();
-      }
-    );
-
-  document
-    .getElementById(
-      "clear-data-button"
-    )
-    ?.addEventListener(
-      "click",
-      () => {
-        const confirmed =
-          window.confirm(
-            "Se borrarán tus tareas, configuración y tiempo de estudio. ¿Continuar?"
-          );
-
-        if (!confirmed) {
-          return;
-        }
-
-        Object.values(
-          STORAGE_KEYS
-        ).forEach((key) => {
-          localStorage.removeItem(
-            key
-          );
-        });
-
-        showToast(
-          "Todos los datos fueron borrados."
+          "Perfil guardado."
         );
 
         renderCurrentPage();
@@ -3475,15 +2246,19 @@ function attachProfileEvents() {
 // ======================================================
 
 function saveClassroomLink(subject) {
-  const link = window.prompt(
-    `Pega el enlace de Classroom de ${subject}:`
-  );
+  const link =
+    window.prompt(
+      `Pega el enlace de Classroom de ${subject}:`
+    );
 
   if (!link) {
     return;
   }
 
-  if (!isValidHttpUrl(link)) {
+  if (
+    !link.startsWith("http://") &&
+    !link.startsWith("https://")
+  ) {
     showToast(
       "El enlace debe comenzar con http:// o https://"
     );
@@ -3502,7 +2277,7 @@ function saveClassroomLink(subject) {
   );
 
   showToast(
-    `Enlace de ${subject} guardado.`
+    "Enlace guardado."
   );
 
   renderCurrentPage();
@@ -3523,77 +2298,28 @@ async function requestNotifications() {
     return;
   }
 
-  if (
-    Notification.permission ===
-    "granted"
-  ) {
-    sendTestNotification();
-    return;
-  }
-
   const permission =
     await Notification.requestPermission();
 
   if (
     permission === "granted"
   ) {
-    sendTestNotification();
-  } else {
+    new Notification(
+      "Black Hold",
+      {
+        body:
+          "Las notificaciones están activadas."
+      }
+    );
+
     showToast(
-      "No se activaron las notificaciones."
+      "Notificaciones activadas."
     );
   }
 }
 
-function sendTestNotification() {
-  const nextActivity =
-    getNextActivity();
-
-  new Notification(
-    "Black Hold",
-    {
-      body: nextActivity
-        ? `${nextActivity.name} comienza a las ${nextActivity.start}.`
-        : "No tienes más clases programadas para hoy.",
-      icon: "./icon-192.png"
-    }
-  );
-
-  showToast(
-    "Notificaciones activadas."
-  );
-}
-
 // ======================================================
-// SERVICE WORKER
-// ======================================================
-
-function registerServiceWorker() {
-  if (
-    !("serviceWorker" in navigator)
-  ) {
-    return;
-  }
-
-  window.addEventListener(
-    "load",
-    () => {
-      navigator.serviceWorker
-        .register(
-          "./service-worker.js"
-        )
-        .catch((error) => {
-          console.error(
-            "Error al registrar el Service Worker:",
-            error
-          );
-        });
-    }
-  );
-}
-
-// ======================================================
-// COMPONENTES AUXILIARES
+// OTROS COMPONENTES
 // ======================================================
 
 function renderEmptyCard(
@@ -3627,7 +2353,6 @@ function showToast(message) {
     );
 
   if (!container) {
-    window.alert(message);
     return;
   }
 
@@ -3646,31 +2371,8 @@ function showToast(message) {
   });
 
   setTimeout(() => {
-    toast.classList.remove(
-      "visible"
-    );
-
-    setTimeout(() => {
-      toast.remove();
-    }, 300);
+    toast.remove();
   }, 3000);
-}
-
-function isValidHttpUrl(value) {
-  if (!value) {
-    return false;
-  }
-
-  try {
-    const url = new URL(value);
-
-    return (
-      url.protocol === "http:" ||
-      url.protocol === "https:"
-    );
-  } catch {
-    return false;
-  }
 }
 
 function escapeHTML(value) {
@@ -3683,13 +2385,25 @@ function escapeHTML(value) {
 }
 
 // ======================================================
-// CERRAR MODAL CON ESCAPE
+// SERVICE WORKER
 // ======================================================
 
-document.addEventListener(
-  "keydown",
-  closeTaskModalWithEscape
-);
+function registerServiceWorker() {
+  if (
+    "serviceWorker" in navigator
+  ) {
+    window.addEventListener(
+      "load",
+      () => {
+        navigator.serviceWorker
+          .register(
+            "./service-worker.js"
+          )
+          .catch(console.error);
+      }
+    );
+  }
+}
 
 // ======================================================
 // INICIAR BLACK HOLD
