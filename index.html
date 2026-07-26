@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  >
+
+  <meta name="theme-color" content="#08090c">
+  <meta
+    name="description"
+    content="Black Hold: aplicación para organizar clases, tareas, estudios y evaluaciones."
+  >
+
+  <title>Black Hold</title>
+
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
+
+  <link
+    rel="icon"
+    href="data:image/svg+xml,
+    <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'>
+      <rect width='100' height='100' rx='24' fill='%2308090c'/>
+      <circle cx='50' cy='50' r='31' fill='%23ff304f'/>
+      <circle cx='50' cy='50' r='18' fill='%2308090c'/>
+    </svg>"
+  >
+</head>
+
+<body>
+  <div class="app-shell">
+
+    <header class="top-header">
+      <div>
+        <p class="brand-label">BLACK HOLD</p>
+        <h1 id="greeting">Hola</h1>
+        <p id="currentDate" class="current-date"></p>
+      </div>
+
+      <button
+        id="notificationButton"
+        class="icon-button"
+        type="button"
+        aria-label="Activar notificaciones"
+      >
+        🔔
+      </button>
+    </header>
+
+    <main>
+
+      <!-- PANTALLA HOY -->
+
+      <section id="homePage" class="page active">
+
+        <article class="hero-card">
+          <div class="hero-glow"></div>
+
+          <div class="card-heading">
+            <div>
+              <span class="eyebrow">TU DÍA</span>
+              <h2>Hoy</h2>
+            </div>
+
+            <span id="dayBadge" class="badge">Cargando</span>
+          </div>
+
+          <p id="dailySummary" class="hero-summary">
+            Preparando tu horario...
+          </p>
+        </article>
+
+        <article class="card next-class-card">
+          <div class="card-heading">
+            <div>
+              <span class="eyebrow">PRÓXIMA ACTIVIDAD</span>
+              <h2 id="nextClassName">Cargando...</h2>
+            </div>
+
+            <div id="nextClassIcon" class="subject-icon">📘</div>
+          </div>
+
+          <div class="next-class-information">
+            <p id="nextClassTime" class="large-time">--:--</p>
+            <p id="nextClassCountdown" class="secondary-text">
+              Revisando el horario
+            </p>
+          </div>
+
+          <div class="button-row">
+            <button
+              id="classroomButton"
+              class="primary-button"
+              type="button"
+            >
+              Abrir Classroom
+            </button>
+
+            <button
+              id="quickStudyButton"
+              class="secondary-button"
+              type="button"
+            >
+              Iniciar repaso
+            </button>
+          </div>
+        </article>
+
+        <section class="section-block">
+          <div class="section-title">
+            <div>
+              <span class="eyebrow">HORARIO</span>
+              <h2>Después</h2>
+            </div>
+
+            <button
+              id="showFullScheduleButton"
+              class="text-button"
+              type="button"
+            >
+              Ver completo
+            </button>
+          </div>
+
+          <div id="todaySchedule" class="timeline"></div>
+        </section>
+
+        <article class="card motivation-card">
+          <span class="eyebrow">MENSAJE DEL DÍA</span>
+          <p id="motivationText">
+            Cada pequeño avance cuenta.
+          </p>
+        </article>
+
+        <section class="section-block">
+          <div class="section-title">
+            <div>
+              <span class="eyebrow">PENDIENTES</span>
+              <h2>Tareas importantes</h2>
+            </div>
+
+            <button
+              class="text-button"
+              data-page-target="tasksPage"
+              type="button"
+            >
+              Ver todas
+            </button>
+          </div>
+
+          <div id="homeTasks" class="task-list"></div>
+        </section>
+      </section>
+
+      <!-- PANTALLA CALENDARIO -->
+
+      <section id="calendarPage" class="page">
+
+        <div class="page-heading">
+          <span class="eyebrow">ORGANIZACIÓN</span>
+          <h1>Calendario</h1>
+          <p>Tu semana escolar y preuniversitaria.</p>
+        </div>
+
+        <article class="card calendar-summary">
+          <div>
+            <span class="eyebrow">SEMANA ACTUAL</span>
+            <h2 id="calendarWeekTitle">Esta semana</h2>
+          </div>
+
+          <div class="calendar-legend">
+            <span><i class="legend-school"></i>Colegio</span>
+            <span><i class="legend-preu"></i>Preuniversitario</span>
+          </div>
+        </article>
+
+        <div id="weeklyCalendar" class="weekly-calendar"></div>
+
+        <article class="card special-notice">
+          <div class="notice-icon">⚠️</div>
+
+          <div>
+            <h3>Cambio temporal de horario</h3>
+            <p>
+              Las clases de Ciencias del preuniversitario comienzan
+              desde la semana del 3 de agosto.
+            </p>
+          </div>
+        </article>
+      </section>
+
+      <!-- PANTALLA TAREAS -->
+
+      <section id="tasksPage" class="page">
+
+        <div class="page-heading">
+          <span class="eyebrow">PRODUCTIVIDAD</span>
+          <h1>Tareas</h1>
+          <p>Organiza tus trabajos, pruebas y entregas.</p>
+        </div>
+
+        <article class="card task-stats">
+          <div>
+            <strong id="pendingTaskCount">0</strong>
+            <span>Pendientes</span>
+          </div>
+
+          <div>
+            <strong id="completedTaskCount">0</strong>
+            <span>Completadas</span>
+          </div>
+
+          <div>
+            <strong id="urgentTaskCount">0</strong>
+            <span>Urgentes</span>
+          </div>
+        </article>
+
+        <div class="task-filters">
+          <button
+            class="filter-button active"
+            data-filter="all"
+            type="button"
+          >
+            Todas
+          </button>
+
+          <button
+            class="filter-button"
+            data-filter="pending"
+            type="button"
+          >
+            Pendientes
+          </button>
+
+          <button
+            class="filter-button"
+            data-filter="completed"
+            type="button"
+          >
+            Terminadas
+          </button>
+        </div>
+
+        <div id="tasksContainer" class="task-list"></div>
+      </section>
+
+      <!-- PANTALLA ESTUDIAR -->
+
+      <section id="studyPage" class="page">
+
+        <div class="page-heading">
+          <span class="eyebrow">CONCENTRACIÓN</span>
+          <h1>Estudiar</h1>
+          <p>Elige un modo y comienza una sesión.</p>
+        </div>
+
+        <article class="timer-card">
+          <span id="timerModeLabel" class="eyebrow">
+            POMODORO CLÁSICO
+          </span>
+
+          <div id="timerDisplay" class="timer-display">25:00</div>
+
+          <p id="timerStatus" class="secondary-text">
+            Preparada para comenzar
+          </p>
+
+          <div class="timer-controls">
+            <button
+              id="startTimerButton"
+              class="primary-button"
+              type="button"
+            >
+              Iniciar
+            </button>
+
+            <button
+              id="pauseTimerButton"
+              class="secondary-button"
+              type="button"
+            >
+              Pausar
+            </button>
+
+            <button
+              id="resetTimerButton"
+              class="secondary-button"
+              type="button"
+            >
+              Reiniciar
+            </button>
+          </div>
+        </article>
+
+        <div class="study-modes">
+
+          <button
+            class="study-mode active"
+            data-minutes="25"
+            data-mode="Pomodoro clásico"
+            type="button"
+          >
+            <span>🍅</span>
+            <strong>Pomodoro</strong>
+            <small>25 minutos</small>
+          </button>
+
+          <button
+            class="study-mode"
+            data-minutes="50"
+            data-mode="Estudio profundo"
+            type="button"
+          >
+            <span>🧠</span>
+            <strong>Profundo</strong>
+            <small>50 minutos</small>
+          </button>
+
+          <button
+            class="study-mode"
+            data-minutes="15"
+            data-mode="Repaso rápido"
+            type="button"
+          >
+            <span>⚡</span>
+            <strong>Repaso</strong>
+            <small>15 minutos</small>
+          </button>
+        </div>
+
+        <article class="card reinforcement-card">
+          <div class="card-heading">
+            <div>
+              <span class="eyebrow">RECOMENDACIÓN</span>
+              <h2>Materia para reforzar</h2>
+            </div>
+
+            <div class="subject-icon">🔬</div>
+          </div>
+
+          <h3>Física</h3>
+          <p>
+            Dedica 25 minutos a practicar fórmulas y resolver
+            un ejercicio representativo.
+          </p>
+
+          <div class="progress-track">
+            <div class="progress-fill" style="width: 55%"></div>
+          </div>
+
+          <small>Confianza actual: 55%</small>
+        </article>
+      </section>
+
+      <!-- PANTALLA PERFIL -->
+
+      <section id="profilePage" class="page">
+
+        <div class="page-heading">
+          <span class="eyebrow">CONFIGURACIÓN</span>
+          <h1>Perfil</h1>
+          <p>Personaliza tu experiencia en Black Hold.</p>
+        </div>
+
+        <article class="card profile-card">
+          <div class="profile-avatar">N</div>
+
+          <div>
+            <h2 id="profileNamePreview">Nahiara</h2>
+            <p>Estudiante</p>
+          </div>
+        </article>
+
+        <form id="profileForm" class="settings-form">
+
+          <label>
+            Nombre
+            <input
+              id="profileName"
+              type="text"
+              value="Nahiara"
+              maxlength="40"
+            >
+          </label>
+
+          <label>
+            Curso
+            <input
+              id="profileCourse"
+              type="text"
+              placeholder="Ejemplo: III Medio"
+              maxlength="40"
+            >
+          </label>
+
+          <label>
+            Enlace de Classroom
+            <input
+              id="classroomLink"
+              type="url"
+              placeholder="https://classroom.google.com/"
+            >
+          </label>
+
+          <label>
+            Hora del resumen diario
+            <input
+              id="summaryTime"
+              type="time"
+              value="07:00"
+            >
+          </label>
+
+          <button class="primary-button full-button" type="submit">
+            Guardar configuración
+          </button>
+        </form>
+
+        <article class="card data-card">
+          <h3>Datos de la aplicación</h3>
+          <p>
+            Las tareas y configuraciones se guardan en este dispositivo.
+          </p>
+
+          <button
+            id="deleteDataButton"
+            class="danger-button"
+            type="button"
+          >
+            Borrar todos los datos
+          </button>
+        </article>
+      </section>
+    </main>
+
+    <button
+      id="openTaskModalButton"
+      class="floating-button"
+      type="button"
+      aria-label="Agregar tarea"
+    >
+      +
+    </button>
+
+    <nav class="bottom-navigation">
+
+      <button
+        class="nav-button active"
+        data-page="homePage"
+        type="button"
+      >
+        <span>⌂</span>
+        <small>Hoy</small>
+      </button>
+
+      <button
+        class="nav-button"
+        data-page="calendarPage"
+        type="button"
+      >
+        <span>▦</span>
+        <small>Calendario</small>
+      </button>
+
+      <button
+        class="nav-button"
+        data-page="tasksPage"
+        type="button"
+      >
+        <span>✓</span>
+        <small>Tareas</small>
+      </button>
+
+      <button
+        class="nav-button"
+        data-page="studyPage"
+        type="button"
+      >
+        <span>◷</span>
+        <small>Estudiar</small>
+      </button>
+
+      <button
+        class="nav-button"
+        data-page="profilePage"
+        type="button"
+      >
+        <span>●</span>
+        <small>Perfil</small>
+      </button>
+    </nav>
+  </div>
+
+  <!-- MODAL NUEVA TAREA -->
+
+  <div id="taskModal" class="modal-overlay hidden">
+
+    <div class="modal">
+
+      <div class="modal-heading">
+        <div>
+          <span class="eyebrow">NUEVO PENDIENTE</span>
+          <h2>Agregar tarea</h2>
+        </div>
+
+        <button
+          id="closeTaskModalButton"
+          class="close-button"
+          type="button"
+          aria-label="Cerrar"
+        >
+          ×
+        </button>
+      </div>
+
+      <form id="taskForm">
+
+        <label>
+          Nombre de la tarea
+          <input
+            id="taskName"
+            type="text"
+            placeholder="Ejemplo: Guía de Física"
+            required
+            maxlength="100"
+          >
+        </label>
+
+        <label>
+          Asignatura
+          <select id="taskSubject" required>
+            <option value="Matemáticas">Matemáticas</option>
+            <option value="Física">Física</option>
+            <option value="Lenguaje">Lenguaje</option>
+            <option value="Inglés">Inglés</option>
+            <option value="Economía">Economía</option>
+            <option value="Química">Química</option>
+            <option value="Historia">Historia</option>
+            <option value="Teatro">Teatro</option>
+            <option value="Otra">Otra</option>
+          </select>
+        </label>
+
+        <div class="form-grid">
+
+          <label>
+            Fecha de entrega
+            <input id="taskDate" type="date" required>
+          </label>
+
+          <label>
+            Prioridad
+            <select id="taskPriority">
+              <option value="urgent">Urgente</option>
+              <option value="high">Alta</option>
+              <option value="medium" selected>Media</option>
+              <option value="low">Baja</option>
+            </select>
+          </label>
+        </div>
+
+        <label>
+          Descripción
+          <textarea
+            id="taskDescription"
+            placeholder="Agrega instrucciones o detalles"
+            rows="4"
+            maxlength="500"
+          ></textarea>
+        </label>
+
+        <label>
+          Enlace
+          <input
+            id="taskLink"
+            type="url"
+            placeholder="Classroom, guía o material"
+          >
+        </label>
+
+        <button class="primary-button full-button" type="submit">
+          Guardar tarea
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <div id="toast" class="toast hidden"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
