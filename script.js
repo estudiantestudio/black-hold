@@ -1,24 +1,31 @@
-// ==========================================
-// BLACK HOLD - APLICACIÓN ESTUDIANTIL
-// ==========================================
+// ======================================================
+// BLACK HOLD
+// Aplicación estudiantil
+// Archivo: script.js
+// ======================================================
+
+// ======================================================
+// CLAVES DE ALMACENAMIENTO
+// ======================================================
 
 const STORAGE_KEYS = {
   tasks: "blackHoldTasks",
   subjects: "blackHoldSubjects",
   settings: "blackHoldSettings",
   studyTime: "blackHoldStudyTime",
+  classroomLinks: "blackHoldClassroomLinks"
 };
 
-// ==========================================
-// CONFIGURACIÓN GENERAL
-// ==========================================
+// ======================================================
+// CONFIGURACIÓN INICIAL
+// ======================================================
 
 const defaultSettings = {
   name: "Nahiara",
   course: "Estudiante",
   school: "",
-  morningSummary: true,
   notifications: true,
+  morningSummary: true
 };
 
 const motivationalMessages = [
@@ -26,76 +33,72 @@ const motivationalMessages = [
   "La constancia vale más que una sesión perfecta.",
   "Empieza con 20 minutos. Lo más difícil es comenzar.",
   "Cada ejercicio que corriges te acerca a tu objetivo.",
-  "No estudies solamente lo que sabes. Refuerza lo que todavía te cuesta.",
+  "Refuerza aquello que todavía te cuesta.",
   "Organizarte hoy te dará más tranquilidad mañana.",
   "Un pequeño avance sigue siendo un avance.",
   "Concéntrate en una tarea a la vez.",
   "Tus resultados mejoran cuando corriges tus errores.",
   "Descansar también forma parte de estudiar correctamente.",
+  "No esperes sentirte preparada para comenzar. Comienza y prepárate en el proceso.",
+  "Tu progreso se construye con decisiones pequeñas y constantes."
 ];
 
-// ==========================================
+// ======================================================
 // HORARIO ESCOLAR
-// ==========================================
+// ======================================================
 
 const schoolSchedule = {
+  0: [],
+
   1: [
     {
       name: "Matemáticas",
       start: "08:15",
       end: "09:45",
-      icon: "calculate",
-      classroom: "",
+      icon: "calculate"
     },
     {
       name: "Teoría del Conocimiento",
       start: "10:05",
       end: "10:50",
-      icon: "psychology",
-      classroom: "",
+      icon: "psychology"
     },
     {
       name: "Física",
       start: "10:50",
       end: "11:30",
-      icon: "science",
-      classroom: "",
+      icon: "science"
     },
     {
       name: "Economía",
       start: "11:30",
       end: "12:50",
-      icon: "payments",
-      classroom: "",
+      icon: "payments"
     },
     {
       name: "Almuerzo",
       start: "12:50",
       end: "13:35",
-      icon: "restaurant",
-      classroom: "",
+      icon: "restaurant"
     },
     {
       name: "Economía",
       start: "13:35",
       end: "14:20",
-      icon: "payments",
-      classroom: "",
+      icon: "payments"
     },
     {
       name: "Class Cancel",
       start: "14:20",
       end: "15:45",
-      icon: "event_busy",
-      classroom: "",
+      icon: "event_busy"
     },
     {
       name: "Deporte",
       start: "15:45",
       end: "16:30",
-      icon: "sports",
-      classroom: "",
-    },
+      icon: "sports"
+    }
   ],
 
   2: [
@@ -103,51 +106,44 @@ const schoolSchedule = {
       name: "Inglés",
       start: "08:15",
       end: "09:45",
-      icon: "language",
-      classroom: "",
+      icon: "language"
     },
     {
       name: "Educación Ciudadana",
       start: "10:05",
       end: "10:50",
-      icon: "account_balance",
-      classroom: "",
+      icon: "account_balance"
     },
     {
       name: "Lenguaje",
       start: "10:50",
       end: "11:30",
-      icon: "menu_book",
-      classroom: "",
+      icon: "menu_book"
     },
     {
       name: "Física",
       start: "11:30",
       end: "12:10",
-      icon: "science",
-      classroom: "",
+      icon: "science"
     },
     {
       name: "Matemáticas",
       start: "12:10",
       end: "12:50",
-      icon: "calculate",
-      classroom: "",
+      icon: "calculate"
     },
     {
       name: "Teoría del Conocimiento",
       start: "13:35",
       end: "14:20",
-      icon: "psychology",
-      classroom: "",
+      icon: "psychology"
     },
     {
       name: "Economía",
       start: "14:20",
       end: "15:00",
-      icon: "payments",
-      classroom: "",
-    },
+      icon: "payments"
+    }
   ],
 
   3: [
@@ -155,37 +151,32 @@ const schoolSchedule = {
       name: "Educación Física",
       start: "08:15",
       end: "09:45",
-      icon: "fitness_center",
-      classroom: "",
+      icon: "fitness_center"
     },
     {
       name: "Física",
       start: "10:05",
       end: "10:50",
-      icon: "science",
-      classroom: "",
+      icon: "science"
     },
     {
       name: "Matemáticas",
       start: "10:50",
       end: "12:10",
-      icon: "calculate",
-      classroom: "",
+      icon: "calculate"
     },
     {
       name: "Lenguaje",
       start: "12:10",
       end: "13:35",
-      icon: "menu_book",
-      classroom: "",
+      icon: "menu_book"
     },
     {
       name: "Inglés",
       start: "13:35",
       end: "14:20",
-      icon: "language",
-      classroom: "",
-    },
+      icon: "language"
+    }
   ],
 
   4: [
@@ -193,37 +184,32 @@ const schoolSchedule = {
       name: "Inglés",
       start: "08:15",
       end: "09:45",
-      icon: "language",
-      classroom: "",
+      icon: "language"
     },
     {
       name: "Educación Ciudadana",
       start: "10:05",
       end: "10:50",
-      icon: "account_balance",
-      classroom: "",
+      icon: "account_balance"
     },
     {
       name: "Matemáticas",
       start: "10:50",
       end: "12:10",
-      icon: "calculate",
-      classroom: "",
+      icon: "calculate"
     },
     {
       name: "Teatro",
       start: "12:10",
       end: "13:35",
-      icon: "theater_comedy",
-      classroom: "",
+      icon: "theater_comedy"
     },
     {
       name: "Lenguaje",
       start: "13:35",
       end: "15:00",
-      icon: "menu_book",
-      classroom: "",
-    },
+      icon: "menu_book"
+    }
   ],
 
   5: [
@@ -231,67 +217,63 @@ const schoolSchedule = {
       name: "Class Cancel",
       start: "08:15",
       end: "09:45",
-      icon: "event_busy",
-      classroom: "",
+      icon: "event_busy"
     },
     {
       name: "Matemáticas",
       start: "10:05",
       end: "10:50",
-      icon: "calculate",
-      classroom: "",
+      icon: "calculate"
     },
     {
       name: "Inglés",
       start: "10:50",
       end: "11:30",
-      icon: "language",
-      classroom: "",
+      icon: "language"
     },
     {
       name: "Teatro",
       start: "11:30",
       end: "12:50",
-      icon: "theater_comedy",
-      classroom: "",
+      icon: "theater_comedy"
     },
     {
       name: "Lenguaje",
       start: "13:35",
       end: "15:00",
-      icon: "menu_book",
-      classroom: "",
-    },
+      icon: "menu_book"
+    }
   ],
 
-  6: [],
-  0: [],
+  6: []
 };
 
-// ==========================================
+// ======================================================
 // PREUNIVERSITARIO
-// ==========================================
+// ======================================================
 
 const preUniversitySchedule = {
+  0: [],
+
   1: [
     {
       name: "Historia",
       start: "18:10",
       end: "19:10",
-      science: true,
+      science: true
     },
     {
       name: "Matemática M1",
       start: "19:20",
       end: "20:20",
-      science: false,
+      science: false
     },
     {
       name: "Física",
       start: "20:30",
       end: "21:30",
-      science: true,
-    },
+      science: true
+    }
   ],
 
   2: [
@@ -299,14 +281,14 @@ const preUniversitySchedule = {
       name: "Comprensión Lectora",
       start: "19:20",
       end: "20:20",
-      science: false,
+      science: false
     },
     {
       name: "Química",
       start: "20:30",
       end: "21:30",
-      science: true,
-    },
+      science: true
+    }
   ],
 
   3: [
@@ -314,20 +296,20 @@ const preUniversitySchedule = {
       name: "Historia",
       start: "18:10",
       end: "19:10",
-      science: true,
+      science: true
     },
     {
       name: "Matemática M1",
       start: "19:20",
       end: "20:20",
-      science: false,
+      science: false
     },
     {
       name: "Física",
       start: "20:30",
       end: "21:30",
-      science: true,
-    },
+      science: true
+    }
   ],
 
   4: [
@@ -335,14 +317,14 @@ const preUniversitySchedule = {
       name: "Comprensión Lectora",
       start: "19:20",
       end: "20:20",
-      science: false,
+      science: false
     },
     {
       name: "Química",
       start: "20:30",
       end: "21:30",
-      science: true,
-    },
+      science: true
+    }
   ],
 
   5: [
@@ -350,82 +332,91 @@ const preUniversitySchedule = {
       name: "Matemática M1",
       start: "19:20",
       end: "20:20",
-      science: false,
-    },
+      science: false
+    }
   ],
 
-  6: [],
-  0: [],
+  6: []
 };
 
-// ==========================================
+// ======================================================
 // MATERIAS
-// ==========================================
+// ======================================================
 
 const defaultSubjects = [
   {
     id: 1,
     name: "Matemáticas",
     confidence: 65,
-    level: "Practicando",
-    color: "blue",
+    level: "Estoy practicando",
+    color: "blue"
   },
   {
     id: 2,
     name: "Física",
     confidence: 45,
-    level: "Necesito reforzar",
-    color: "red",
+    level: "Necesito reforzarlo",
+    color: "red"
   },
   {
     id: 3,
     name: "Lenguaje",
     confidence: 70,
-    level: "Practicando",
-    color: "blue",
+    level: "Estoy practicando",
+    color: "blue"
   },
   {
     id: 4,
     name: "Inglés",
     confidence: 75,
-    level: "Practicando",
-    color: "green",
+    level: "Lo manejo bien",
+    color: "green"
   },
   {
     id: 5,
     name: "Economía",
     confidence: 55,
     level: "Todavía me cuesta",
-    color: "orange",
-  },
+    color: "orange"
+  }
 ];
 
-// ==========================================
-// VARIABLES
-// ==========================================
+// ======================================================
+// VARIABLES DE LA APLICACIÓN
+// ======================================================
 
 let currentPage = "home";
+
 let pomodoroInterval = null;
 let pomodoroSeconds = 25 * 60;
 let pomodoroRunning = false;
 let selectedPomodoroMinutes = 25;
 
-// ==========================================
+// ======================================================
 // LOCAL STORAGE
-// ==========================================
+// ======================================================
 
 function getStorage(key, fallback) {
   try {
-    const saved = localStorage.getItem(key);
-    return saved ? JSON.parse(saved) : fallback;
+    const savedValue = localStorage.getItem(key);
+
+    if (!savedValue) {
+      return fallback;
+    }
+
+    return JSON.parse(savedValue);
   } catch (error) {
-    console.error("Error leyendo datos:", error);
+    console.error("No se pudieron leer los datos:", error);
     return fallback;
   }
 }
 
 function setStorage(key, value) {
-  localStorage.setItem(key, JSON.stringify(value));
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch (error) {
+    console.error("No se pudieron guardar los datos:", error);
+  }
 }
 
 function getTasks() {
@@ -437,45 +428,78 @@ function saveTasks(tasks) {
 }
 
 function getSubjects() {
-  return getStorage(STORAGE_KEYS.subjects, defaultSubjects);
+  return getStorage(
+    STORAGE_KEYS.subjects,
+    defaultSubjects
+  );
 }
 
 function getSettings() {
-  return getStorage(STORAGE_KEYS.settings, defaultSettings);
+  return getStorage(
+    STORAGE_KEYS.settings,
+    defaultSettings
+  );
 }
 
-// ==========================================
-// FUNCIONES DE FECHA Y HORA
-// ==========================================
+function getClassroomLinks() {
+  return getStorage(
+    STORAGE_KEYS.classroomLinks,
+    {}
+  );
+}
+
+// ======================================================
+// FECHA Y HORA
+// ======================================================
+
+function capitalize(text) {
+  if (!text) {
+    return "";
+  }
+
+  return (
+    text.charAt(0).toUpperCase() +
+    text.slice(1)
+  );
+}
 
 function formatCurrentDate(date = new Date()) {
   return new Intl.DateTimeFormat("es-CL", {
     weekday: "long",
     day: "numeric",
     month: "long",
+    year: "numeric"
   }).format(date);
 }
 
-function capitalize(text) {
-  return text.charAt(0).toUpperCase() + text.slice(1);
-}
-
 function timeToMinutes(time) {
-  const [hours, minutes] = time.split(":").map(Number);
+  const [hours, minutes] = time
+    .split(":")
+    .map(Number);
+
   return hours * 60 + minutes;
 }
 
 function getCurrentMinutes() {
   const now = new Date();
-  return now.getHours() * 60 + now.getMinutes();
+
+  return (
+    now.getHours() * 60 +
+    now.getMinutes()
+  );
 }
 
 function getMinutesDifference(startTime) {
-  return timeToMinutes(startTime) - getCurrentMinutes();
+  return (
+    timeToMinutes(startTime) -
+    getCurrentMinutes()
+  );
 }
 
 function formatRemainingTime(minutes) {
-  if (minutes <= 0) return "Comenzando ahora";
+  if (minutes <= 0) {
+    return "Comenzando ahora";
+  }
 
   if (minutes < 60) {
     return `Faltan ${minutes} minutos`;
@@ -492,59 +516,89 @@ function formatRemainingTime(minutes) {
 }
 
 function getDaySchedule() {
-  return schoolSchedule[new Date().getDay()] || [];
+  const day = new Date().getDay();
+
+  return schoolSchedule[day] || [];
 }
 
 function getTodayPreUniversity() {
   const today = new Date();
-  const schedule = preUniversitySchedule[today.getDay()] || [];
+  const day = today.getDay();
 
-  // Las ciencias comienzan desde el 3 de agosto de 2026.
-  const scienceStartDate = new Date("2026-08-03T00:00:00");
+  const schedule =
+    preUniversitySchedule[day] || [];
+
+  const scienceStartDate =
+    new Date("2026-08-03T00:00:00");
 
   return schedule.filter((classItem) => {
-    if (!classItem.science) return true;
+    if (!classItem.science) {
+      return true;
+    }
+
     return today >= scienceStartDate;
   });
 }
 
 function getNextActivity() {
-  const todayClasses = [
-    ...getDaySchedule().map((item) => ({
+  const classroomLinks =
+    getClassroomLinks();
+
+  const schoolActivities =
+    getDaySchedule().map((item) => ({
       ...item,
       type: "Colegio",
-    })),
-    ...getTodayPreUniversity().map((item) => ({
+      classroom:
+        classroomLinks[item.name] || ""
+    }));
+
+  const preUniversityActivities =
+    getTodayPreUniversity().map((item) => ({
       ...item,
       type: "Preuniversitario",
-    })),
+      icon: "school",
+      classroom:
+        classroomLinks[item.name] || ""
+    }));
+
+  const activities = [
+    ...schoolActivities,
+    ...preUniversityActivities
   ];
 
-  todayClasses.sort(
-    (first, second) =>
-      timeToMinutes(first.start) - timeToMinutes(second.start)
-  );
+  activities.sort((first, second) => {
+    return (
+      timeToMinutes(first.start) -
+      timeToMinutes(second.start)
+    );
+  });
 
-  const currentMinutes = getCurrentMinutes();
+  const currentMinutes =
+    getCurrentMinutes();
 
   return (
-    todayClasses.find(
-      (item) => timeToMinutes(item.end) >= currentMinutes
-    ) || null
+    activities.find((item) => {
+      return (
+        timeToMinutes(item.end) >=
+        currentMinutes
+      );
+    }) || null
   );
 }
 
-// ==========================================
-// CREACIÓN GENERAL DE LA APP
-// ==========================================
+// ======================================================
+// INICIO DE LA APLICACIÓN
+// ======================================================
 
 function initializeApp() {
-  const root = document.getElementById("app");
+  const root =
+    document.getElementById("app");
 
   if (!root) {
     console.error(
-      'No se encontró el elemento <div id="app"></div> en index.html.'
+      'Falta <div id="app"></div> en index.html.'
     );
+
     return;
   }
 
@@ -553,24 +607,33 @@ function initializeApp() {
 
   setInterval(() => {
     if (currentPage === "home") {
-      renderApp();
+      renderCurrentPage();
     }
   }, 60000);
 }
 
 function renderApp() {
-  const root = document.getElementById("app");
+  const root =
+    document.getElementById("app");
 
   root.innerHTML = `
     <div class="app-shell">
-      <main id="page-content" class="page-content"></main>
+      <main
+        id="page-content"
+        class="page-content"
+      ></main>
+
       ${renderBottomNavigation()}
+
       <button
+        type="button"
         class="floating-add-button"
         id="floating-add-button"
         aria-label="Agregar tarea"
       >
-        <span class="material-symbols-rounded">add</span>
+        <span class="material-symbols-rounded">
+          add
+        </span>
       </button>
     </div>
 
@@ -583,33 +646,46 @@ function renderApp() {
 }
 
 function renderCurrentPage() {
-  const pageContent = document.getElementById("page-content");
+  const pageContent =
+    document.getElementById("page-content");
 
-  if (!pageContent) return;
+  if (!pageContent) {
+    return;
+  }
 
   switch (currentPage) {
     case "calendar":
-      pageContent.innerHTML = renderCalendarPage();
+      pageContent.innerHTML =
+        renderCalendarPage();
+
       attachCalendarEvents();
       break;
 
     case "tasks":
-      pageContent.innerHTML = renderTasksPage();
+      pageContent.innerHTML =
+        renderTasksPage();
+
       attachTaskEvents();
       break;
 
     case "study":
-      pageContent.innerHTML = renderStudyPage();
+      pageContent.innerHTML =
+        renderStudyPage();
+
       attachStudyEvents();
       break;
 
     case "profile":
-      pageContent.innerHTML = renderProfilePage();
+      pageContent.innerHTML =
+        renderProfilePage();
+
       attachProfileEvents();
       break;
 
     default:
-      pageContent.innerHTML = renderHomePage();
+      pageContent.innerHTML =
+        renderHomePage();
+
       attachHomeEvents();
       break;
   }
@@ -617,73 +693,120 @@ function renderCurrentPage() {
   updateNavigationState();
 }
 
-// ==========================================
+// ======================================================
 // ENCABEZADO
-// ==========================================
+// ======================================================
 
-function renderHeader(title = "Black Hold", subtitle = "") {
+function renderHeader(
+  title = "Black Hold",
+  subtitle = ""
+) {
   return `
     <header class="top-header">
       <div>
-        <p class="header-label">${subtitle}</p>
-        <h1>${title}</h1>
+        <p class="header-label">
+          ${escapeHTML(subtitle)}
+        </p>
+
+        <h1>
+          ${escapeHTML(title)}
+        </h1>
       </div>
 
-      <button class="header-icon-button" id="notification-button">
-        <span class="material-symbols-rounded">notifications</span>
+      <button
+        type="button"
+        class="header-icon-button"
+        id="notification-button"
+        aria-label="Activar notificaciones"
+      >
+        <span class="material-symbols-rounded">
+          notifications
+        </span>
       </button>
     </header>
   `;
 }
 
-// ==========================================
+// ======================================================
 // PÁGINA DE INICIO
-// ==========================================
+// ======================================================
 
 function renderHomePage() {
   const settings = getSettings();
   const tasks = getTasks();
-  const nextActivity = getNextActivity();
-  const todayClasses = getDaySchedule();
-  const pendingTasks = tasks.filter((task) => !task.completed);
+  const nextActivity =
+    getNextActivity();
+  const todayClasses =
+    getDaySchedule();
+
+  const pendingTasks =
+    tasks.filter((task) => {
+      return !task.completed;
+    });
+
+  const messageIndex =
+    new Date().getDate() %
+    motivationalMessages.length;
+
   const motivation =
-    motivationalMessages[
-      new Date().getDate() % motivationalMessages.length
-    ];
+    motivationalMessages[messageIndex];
 
   return `
     <section class="page home-page">
       ${renderHeader(
-        `Hola, ${escapeHTML(settings.name)} 👋`,
+        `Hola, ${settings.name} 👋`,
         "BLACK HOLD"
       )}
 
       <div class="date-row">
-        <span class="material-symbols-rounded">calendar_month</span>
-        <span>${capitalize(formatCurrentDate())}</span>
+        <span class="material-symbols-rounded">
+          calendar_month
+        </span>
+
+        <span>
+          ${capitalize(formatCurrentDate())}
+        </span>
       </div>
 
       <section class="hero-card">
         <div class="hero-card-top">
           <div>
-            <p class="card-eyebrow">HOY</p>
-            <h2>${todayClasses.length} clases programadas</h2>
-            <p>${pendingTasks.length} tareas pendientes</p>
+            <p class="card-eyebrow">
+              HOY
+            </p>
+
+            <h2>
+              ${todayClasses.length}
+              clases programadas
+            </h2>
+
+            <p>
+              ${pendingTasks.length}
+              tareas pendientes
+            </p>
           </div>
 
-          <div class="hero-date-number">${new Date().getDate()}</div>
+          <div class="hero-date-number">
+            ${new Date().getDate()}
+          </div>
         </div>
 
         <div class="daily-progress">
           <div class="progress-label-row">
             <span>Progreso diario</span>
-            <span>${calculateDailyProgress()}%</span>
+
+            <span>
+              ${calculateDailyProgress()}%
+            </span>
           </div>
 
           <div class="progress-track">
             <div
               class="progress-fill"
-              style="width: ${calculateDailyProgress()}%"
+              style="
+                width:
+                ${calculateDailyProgress()}%;
+              "
             ></div>
           </div>
         </div>
@@ -692,43 +815,83 @@ function renderHomePage() {
       <section class="section-block">
         <div class="section-title-row">
           <div>
-            <p class="section-label">PRÓXIMA ACTIVIDAD</p>
-            <h2>Lo que viene ahora</h2>
+            <p class="section-label">
+              PRÓXIMA ACTIVIDAD
+            </p>
+
+            <h2>
+              Lo que viene ahora
+            </h2>
           </div>
         </div>
 
         ${
           nextActivity
-            ? renderNextActivityCard(nextActivity)
+            ? renderNextActivityCard(
+                nextActivity
+              )
             : renderEmptyCard(
                 "event_available",
                 "No tienes más actividades",
-                "Puedes aprovechar para descansar o adelantar una tarea."
+                "Puedes descansar o adelantar una tarea."
               )
         }
       </section>
 
       <section class="quick-actions-grid">
-        <button class="quick-action-card" data-action="start-pomodoro">
-          <span class="material-symbols-rounded">timer</span>
+        <button
+          type="button"
+          class="quick-action-card"
+          data-action="start-pomodoro"
+        >
+          <span class="material-symbols-rounded">
+            timer
+          </span>
+
           <strong>Pomodoro</strong>
           <small>Comenzar enfoque</small>
         </button>
 
-        <button class="quick-action-card" data-action="what-now">
-          <span class="material-symbols-rounded">auto_awesome</span>
-          <strong>¿Qué hago ahora?</strong>
-          <small>Obtener recomendación</small>
+        <button
+          type="button"
+          class="quick-action-card"
+          data-action="what-now"
+        >
+          <span class="material-symbols-rounded">
+            auto_awesome
+          </span>
+
+          <strong>
+            ¿Qué hago ahora?
+          </strong>
+
+          <small>
+            Obtener recomendación
+          </small>
         </button>
 
-        <button class="quick-action-card" data-action="new-task">
-          <span class="material-symbols-rounded">add_task</span>
+        <button
+          type="button"
+          class="quick-action-card"
+          data-action="new-task"
+        >
+          <span class="material-symbols-rounded">
+            add_task
+          </span>
+
           <strong>Nueva tarea</strong>
           <small>Registrar rápidamente</small>
         </button>
 
-        <button class="quick-action-card" data-action="show-preu">
-          <span class="material-symbols-rounded">school</span>
+        <button
+          type="button"
+          class="quick-action-card"
+          data-action="show-preu"
+        >
+          <span class="material-symbols-rounded">
+            school
+          </span>
+
           <strong>Preuniversitario</strong>
           <small>Ver clases PAES</small>
         </button>
@@ -737,11 +900,18 @@ function renderHomePage() {
       <section class="section-block">
         <div class="section-title-row">
           <div>
-            <p class="section-label">HORARIO</p>
+            <p class="section-label">
+              HORARIO
+            </p>
+
             <h2>Clases de hoy</h2>
           </div>
 
-          <button class="text-button" data-go-page="calendar">
+          <button
+            type="button"
+            class="text-button"
+            data-go-page="calendar"
+          >
             Ver calendario
           </button>
         </div>
@@ -750,7 +920,11 @@ function renderHomePage() {
           ${
             todayClasses.length > 0
               ? todayClasses
-                  .map((classItem) => renderScheduleItem(classItem))
+                  .map((classItem) => {
+                    return renderScheduleItem(
+                      classItem
+                    );
+                  })
                   .join("")
               : renderEmptyCard(
                   "weekend",
@@ -764,11 +938,18 @@ function renderHomePage() {
       ${renderPreUniversitySection()}
 
       <section class="motivation-card">
-        <span class="material-symbols-rounded">bolt</span>
+        <span class="material-symbols-rounded">
+          bolt
+        </span>
 
         <div>
-          <p class="section-label">MENSAJE DEL DÍA</p>
-          <h3>${motivation}</h3>
+          <p class="section-label">
+            MENSAJE DEL DÍA
+          </p>
+
+          <h3>
+            ${escapeHTML(motivation)}
+          </h3>
         </div>
       </section>
 
@@ -778,7 +959,10 @@ function renderHomePage() {
 }
 
 function renderNextActivityCard(activity) {
-  const remaining = getMinutesDifference(activity.start);
+  const remaining =
+    getMinutesDifference(
+      activity.start
+    );
 
   return `
     <article class="next-class-card">
@@ -789,12 +973,25 @@ function renderNextActivityCard(activity) {
       </div>
 
       <div class="next-class-main">
-        <span class="activity-type">${activity.type}</span>
-        <h3>${escapeHTML(activity.name)}</h3>
-        <p>${activity.start} – ${activity.end}</p>
+        <span class="activity-type">
+          ${escapeHTML(activity.type)}
+        </span>
+
+        <h3>
+          ${escapeHTML(activity.name)}
+        </h3>
+
+        <p>
+          ${activity.start}
+          –
+          ${activity.end}
+        </p>
 
         <div class="countdown-pill">
-          <span class="material-symbols-rounded">schedule</span>
+          <span class="material-symbols-rounded">
+            schedule
+          </span>
+
           ${formatRemainingTime(remaining)}
         </div>
       </div>
@@ -804,7 +1001,9 @@ function renderNextActivityCard(activity) {
           activity.classroom
             ? `
               <a
-                href="${activity.classroom}"
+                href="${escapeHTML(
+                  activity.classroom
+                )}"
                 target="_blank"
                 rel="noopener noreferrer"
                 class="small-action-button"
@@ -814,9 +1013,12 @@ function renderNextActivityCard(activity) {
             `
             : `
               <button
+                type="button"
                 class="small-action-button"
                 data-action="add-classroom"
-                data-subject="${escapeHTML(activity.name)}"
+                data-subject="${escapeHTML(
+                  activity.name
+                )}"
               >
                 Agregar enlace
               </button>
@@ -824,9 +1026,12 @@ function renderNextActivityCard(activity) {
         }
 
         <button
+          type="button"
           class="small-action-button secondary"
           data-action="study-subject"
-          data-subject="${escapeHTML(activity.name)}"
+          data-subject="${escapeHTML(
+            activity.name
+          )}"
         >
           Repasar
         </button>
@@ -836,23 +1041,40 @@ function renderNextActivityCard(activity) {
 }
 
 function renderScheduleItem(classItem) {
-  const currentMinutes = getCurrentMinutes();
-  const start = timeToMinutes(classItem.start);
-  const end = timeToMinutes(classItem.end);
+  const currentMinutes =
+    getCurrentMinutes();
+
+  const start =
+    timeToMinutes(classItem.start);
+
+  const end =
+    timeToMinutes(classItem.end);
 
   let status = "";
 
-  if (currentMinutes >= start && currentMinutes <= end) {
+  if (
+    currentMinutes >= start &&
+    currentMinutes <= end
+  ) {
     status = "current";
-  } else if (currentMinutes > end) {
+  } else if (
+    currentMinutes > end
+  ) {
     status = "completed";
   }
 
   return `
-    <article class="timeline-item ${status}">
+    <article
+      class="timeline-item ${status}"
+    >
       <div class="timeline-time">
-        <strong>${classItem.start}</strong>
-        <span>${classItem.end}</span>
+        <strong>
+          ${classItem.start}
+        </strong>
+
+        <span>
+          ${classItem.end}
+        </span>
       </div>
 
       <div class="timeline-line">
@@ -867,7 +1089,10 @@ function renderScheduleItem(classItem) {
         </div>
 
         <div>
-          <h3>${escapeHTML(classItem.name)}</h3>
+          <h3>
+            ${escapeHTML(classItem.name)}
+          </h3>
+
           <p>
             ${
               status === "current"
@@ -884,15 +1109,25 @@ function renderScheduleItem(classItem) {
 }
 
 function renderPreUniversitySection() {
-  const classes = getTodayPreUniversity();
+  const classes =
+    getTodayPreUniversity();
+
   const today = new Date();
-  const scienceStartDate = new Date("2026-08-03T00:00:00");
+
+  const scienceStartDate =
+    new Date("2026-08-03T00:00:00");
 
   return `
-    <section class="section-block" id="preuniversity-section">
+    <section
+      class="section-block"
+      id="preuniversity-section"
+    >
       <div class="section-title-row">
         <div>
-          <p class="section-label">PAES</p>
+          <p class="section-label">
+            PAES
+          </p>
+
           <h2>Preuniversitario</h2>
         </div>
       </div>
@@ -901,11 +1136,18 @@ function renderPreUniversitySection() {
         today < scienceStartDate
           ? `
             <div class="warning-card">
-              <span class="material-symbols-rounded">info</span>
+              <span class="material-symbols-rounded">
+                info
+              </span>
+
               <div>
-                <strong>Cambio temporal de horario</strong>
+                <strong>
+                  Cambio temporal de horario
+                </strong>
+
                 <p>
-                  Las clases de Ciencias comienzan la semana del
+                  Las clases de Ciencias
+                  comienzan la semana del
                   3 de agosto.
                 </p>
               </div>
@@ -918,27 +1160,42 @@ function renderPreUniversitySection() {
         ${
           classes.length > 0
             ? classes
-                .map(
-                  (classItem) => `
+                .map((classItem) => {
+                  return `
                     <article class="preu-card">
                       <div>
-                        <span class="preu-label">CLASE PAES</span>
-                        <h3>${escapeHTML(classItem.name)}</h3>
-                        <p>${classItem.start} – ${classItem.end}</p>
+                        <span class="preu-label">
+                          CLASE PAES
+                        </span>
+
+                        <h3>
+                          ${escapeHTML(
+                            classItem.name
+                          )}
+                        </h3>
+
+                        <p>
+                          ${classItem.start}
+                          –
+                          ${classItem.end}
+                        </p>
                       </div>
 
                       <button
+                        type="button"
                         class="icon-action-button"
                         data-action="prepare-preu"
-                        data-subject="${escapeHTML(classItem.name)}"
+                        data-subject="${escapeHTML(
+                          classItem.name
+                        )}"
                       >
                         <span class="material-symbols-rounded">
                           arrow_forward
                         </span>
                       </button>
                     </article>
-                  `
-                )
+                  `;
+                })
                 .join("")
             : renderEmptyCard(
                 "school",
@@ -953,19 +1210,33 @@ function renderPreUniversitySection() {
 
 function renderPendingTasksPreview() {
   const tasks = getTasks()
-    .filter((task) => !task.completed)
-    .sort((a, b) => new Date(a.date) - new Date(b.date))
+    .filter((task) => {
+      return !task.completed;
+    })
+    .sort((first, second) => {
+      return (
+        new Date(first.date) -
+        new Date(second.date)
+      );
+    })
     .slice(0, 3);
 
   return `
     <section class="section-block">
       <div class="section-title-row">
         <div>
-          <p class="section-label">PENDIENTES</p>
+          <p class="section-label">
+            PENDIENTES
+          </p>
+
           <h2>Próximas tareas</h2>
         </div>
 
-        <button class="text-button" data-go-page="tasks">
+        <button
+          type="button"
+          class="text-button"
+          data-go-page="tasks"
+        >
           Ver todas
         </button>
       </div>
@@ -973,7 +1244,14 @@ function renderPendingTasksPreview() {
       <div class="task-preview-list">
         ${
           tasks.length > 0
-            ? tasks.map((task) => renderTaskCard(task, true)).join("")
+            ? tasks
+                .map((task) => {
+                  return renderTaskCard(
+                    task,
+                    true
+                  );
+                })
+                .join("")
             : renderEmptyCard(
                 "task_alt",
                 "Todo al día",
@@ -986,120 +1264,212 @@ function renderPendingTasksPreview() {
 }
 
 function calculateDailyProgress() {
-  const schedule = getDaySchedule();
+  const schedule =
+    getDaySchedule();
 
-  if (schedule.length === 0) return 100;
+  if (schedule.length === 0) {
+    return 100;
+  }
 
-  const currentMinutes = getCurrentMinutes();
-  const completed = schedule.filter(
-    (item) => timeToMinutes(item.end) < currentMinutes
-  ).length;
+  const currentMinutes =
+    getCurrentMinutes();
+
+  const completed =
+    schedule.filter((item) => {
+      return (
+        timeToMinutes(item.end) <
+        currentMinutes
+      );
+    }).length;
 
   return Math.min(
     100,
-    Math.round((completed / schedule.length) * 100)
+    Math.round(
+      (completed / schedule.length) *
+        100
+    )
   );
 }
 
-// ==========================================
-// PÁGINA DE CALENDARIO
-// ==========================================
+// ======================================================
+// CALENDARIO
+// ======================================================
 
 function renderCalendarPage() {
   const days = [
-    { number: 1, name: "Lunes" },
-    { number: 2, name: "Martes" },
-    { number: 3, name: "Miércoles" },
-    { number: 4, name: "Jueves" },
-    { number: 5, name: "Viernes" },
+    {
+      number: 1,
+      name: "Lunes"
+    },
+    {
+      number: 2,
+      name: "Martes"
+    },
+    {
+      number: 3,
+      name: "Miércoles"
+    },
+    {
+      number: 4,
+      name: "Jueves"
+    },
+    {
+      number: 5,
+      name: "Viernes"
+    }
   ];
 
   return `
     <section class="page calendar-page">
-      ${renderHeader("Calendario", "TU SEMANA")}
+      ${renderHeader(
+        "Calendario",
+        "TU SEMANA"
+      )}
 
       <div class="calendar-tabs">
-        <button class="calendar-tab active" data-calendar-view="week">
+        <button
+          type="button"
+          class="calendar-tab active"
+          data-calendar-view="week"
+        >
           Semana
         </button>
-        <button class="calendar-tab" data-calendar-view="day">
+
+        <button
+          type="button"
+          class="calendar-tab"
+          data-calendar-view="day"
+        >
           Día
         </button>
       </div>
 
       <div class="week-calendar">
         ${days
-          .map(
-            (day) => `
+          .map((day) => {
+            return `
               <section class="calendar-day-card">
                 <div class="calendar-day-header">
-                  <h2>${day.name}</h2>
-                  <span>${schoolSchedule[day.number].length} clases</span>
+                  <h2>
+                    ${day.name}
+                  </h2>
+
+                  <span>
+                    ${
+                      schoolSchedule[
+                        day.number
+                      ].length
+                    }
+                    clases
+                  </span>
                 </div>
 
                 <div class="calendar-event-list">
-                  ${schoolSchedule[day.number]
-                    .map(
-                      (item) => `
+                  ${schoolSchedule[
+                    day.number
+                  ]
+                    .map((item) => {
+                      return `
                         <article class="calendar-event">
                           <div class="calendar-event-time">
                             ${item.start}
                           </div>
 
                           <div class="calendar-event-content">
-                            <strong>${escapeHTML(item.name)}</strong>
-                            <span>${item.start} – ${item.end}</span>
+                            <strong>
+                              ${escapeHTML(
+                                item.name
+                              )}
+                            </strong>
+
+                            <span>
+                              ${item.start}
+                              –
+                              ${item.end}
+                            </span>
                           </div>
                         </article>
-                      `
-                    )
+                      `;
+                    })
                     .join("")}
 
-                  ${(preUniversitySchedule[day.number] || [])
-                    .map(
-                      (item) => `
-                        <article class="calendar-event preu-event">
-                          <div class="calendar-event-time">
-                            ${item.start}
-                          </div>
+                  ${
+                    preUniversitySchedule[
+                      day.number
+                    ]
+                      ?.map((item) => {
+                        return `
+                          <article class="calendar-event preu-event">
+                            <div class="calendar-event-time">
+                              ${item.start}
+                            </div>
 
-                          <div class="calendar-event-content">
-                            <strong>${escapeHTML(item.name)}</strong>
-                            <span>Preuniversitario PAES</span>
-                          </div>
-                        </article>
-                      `
-                    )
-                    .join("")}
+                            <div class="calendar-event-content">
+                              <strong>
+                                ${escapeHTML(
+                                  item.name
+                                )}
+                              </strong>
+
+                              <span>
+                                Preuniversitario PAES
+                              </span>
+                            </div>
+                          </article>
+                        `;
+                      })
+                      .join("") || ""
+                  }
                 </div>
               </section>
-            `
-          )
+            `;
+          })
           .join("")}
       </div>
     </section>
   `;
 }
 
-// ==========================================
-// PÁGINA DE TAREAS
-// ==========================================
+// ======================================================
+// TAREAS
+// ======================================================
 
 function renderTasksPage() {
-  const tasks = getTasks().sort((a, b) => {
-    if (a.completed !== b.completed) {
-      return Number(a.completed) - Number(b.completed);
+  const tasks = getTasks().sort(
+    (first, second) => {
+      if (
+        first.completed !==
+        second.completed
+      ) {
+        return (
+          Number(first.completed) -
+          Number(second.completed)
+        );
+      }
+
+      return (
+        new Date(first.date) -
+        new Date(second.date)
+      );
     }
+  );
 
-    return new Date(a.date) - new Date(b.date);
-  });
+  const pending =
+    tasks.filter((task) => {
+      return !task.completed;
+    }).length;
 
-  const pending = tasks.filter((task) => !task.completed).length;
-  const completed = tasks.filter((task) => task.completed).length;
+  const completed =
+    tasks.filter((task) => {
+      return task.completed;
+    }).length;
 
   return `
     <section class="page tasks-page">
-      ${renderHeader("Tareas", "ORGANIZA TU TRABAJO")}
+      ${renderHeader(
+        "Tareas",
+        "ORGANIZA TU TRABAJO"
+      )}
 
       <div class="task-statistics">
         <article>
@@ -1120,12 +1490,22 @@ function renderTasksPage() {
 
       <div class="section-title-row">
         <div>
-          <p class="section-label">LISTA</p>
+          <p class="section-label">
+            LISTA
+          </p>
+
           <h2>Mis tareas</h2>
         </div>
 
-        <button class="primary-small-button" id="new-task-button">
-          <span class="material-symbols-rounded">add</span>
+        <button
+          type="button"
+          class="primary-small-button"
+          id="new-task-button"
+        >
+          <span class="material-symbols-rounded">
+            add
+          </span>
+
           Nueva
         </button>
       </div>
@@ -1133,11 +1513,17 @@ function renderTasksPage() {
       <div class="task-list">
         ${
           tasks.length > 0
-            ? tasks.map((task) => renderTaskCard(task)).join("")
+            ? tasks
+                .map((task) => {
+                  return renderTaskCard(
+                    task
+                  );
+                })
+                .join("")
             : renderEmptyCard(
                 "assignment",
                 "No hay tareas registradas",
-                "Presiona el botón Nueva para agregar tu primera tarea."
+                "Presiona Nueva para agregar tu primera tarea."
               )
         }
       </div>
@@ -1145,22 +1531,38 @@ function renderTasksPage() {
   `;
 }
 
-function renderTaskCard(task, compact = false) {
-  const daysRemaining = calculateDaysRemaining(task.date);
+function renderTaskCard(
+  task,
+  compact = false
+) {
+  const daysRemaining =
+    calculateDaysRemaining(task.date);
+
+  const safeLink =
+    isValidHttpUrl(task.link)
+      ? escapeHTML(task.link)
+      : "";
 
   return `
     <article
-      class="task-card ${task.completed ? "completed" : ""} ${
-    compact ? "compact" : ""
-  }"
+      class="
+        task-card
+        ${task.completed ? "completed" : ""}
+        ${compact ? "compact" : ""}
+      "
     >
       <button
+        type="button"
         class="task-check-button"
         data-task-complete="${task.id}"
         aria-label="Cambiar estado"
       >
         <span class="material-symbols-rounded">
-          ${task.completed ? "check_circle" : "radio_button_unchecked"}
+          ${
+            task.completed
+              ? "check_circle"
+              : "radio_button_unchecked"
+          }
         </span>
       </button>
 
@@ -1170,22 +1572,40 @@ function renderTaskCard(task, compact = false) {
             ${escapeHTML(task.subject)}
           </span>
 
-          <span class="priority-chip priority-${task.priority}">
+          <span
+            class="
+              priority-chip
+              priority-${escapeHTML(
+                task.priority
+              )}
+            "
+          >
             ${capitalize(task.priority)}
           </span>
         </div>
 
-        <h3>${escapeHTML(task.title)}</h3>
+        <h3>
+          ${escapeHTML(task.title)}
+        </h3>
 
         ${
           task.description
-            ? `<p>${escapeHTML(task.description)}</p>`
+            ? `
+              <p>
+                ${escapeHTML(
+                  task.description
+                )}
+              </p>
+            `
             : ""
         }
 
         <div class="task-meta">
           <span>
-            <span class="material-symbols-rounded">calendar_today</span>
+            <span class="material-symbols-rounded">
+              calendar_today
+            </span>
+
             ${formatTaskDate(task.date)}
           </span>
 
@@ -1199,6 +1619,25 @@ function renderTaskCard(task, compact = false) {
             }
           </span>
         </div>
+
+        ${
+          safeLink
+            ? `
+              <a
+                href="${safeLink}"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="task-link-button"
+              >
+                <span class="material-symbols-rounded">
+                  link
+                </span>
+
+                Abrir material
+              </a>
+            `
+            : ""
+        }
       </div>
 
       ${
@@ -1206,11 +1645,14 @@ function renderTaskCard(task, compact = false) {
           ? ""
           : `
             <button
+              type="button"
               class="task-delete-button"
               data-task-delete="${task.id}"
               aria-label="Eliminar tarea"
             >
-              <span class="material-symbols-rounded">delete</span>
+              <span class="material-symbols-rounded">
+                delete
+              </span>
             </button>
           `
       }
@@ -1218,87 +1660,174 @@ function renderTaskCard(task, compact = false) {
   `;
 }
 
-function calculateDaysRemaining(dateString) {
+function calculateDaysRemaining(
+  dateString
+) {
+  if (!dateString) {
+    return 0;
+  }
+
   const today = new Date();
-  const targetDate = new Date(`${dateString}T23:59:59`);
+
+  const targetDate =
+    new Date(
+      `${dateString}T12:00:00`
+    );
 
   today.setHours(0, 0, 0, 0);
   targetDate.setHours(0, 0, 0, 0);
 
   return Math.ceil(
-    (targetDate.getTime() - today.getTime()) / 86400000
+    (
+      targetDate.getTime() -
+      today.getTime()
+    ) / 86400000
   );
 }
 
 function formatTaskDate(dateString) {
-  const date = new Date(`${dateString}T12:00:00`);
+  if (!dateString) {
+    return "Sin fecha";
+  }
 
-  return new Intl.DateTimeFormat("es-CL", {
-    day: "numeric",
-    month: "short",
-  }).format(date);
+  const date =
+    new Date(
+      `${dateString}T12:00:00`
+    );
+
+  return new Intl.DateTimeFormat(
+    "es-CL",
+    {
+      day: "numeric",
+      month: "short"
+    }
+  ).format(date);
 }
 
-// ==========================================
+// ======================================================
 // PÁGINA DE ESTUDIO
-// ==========================================
+// ======================================================
 
 function renderStudyPage() {
-  const subjects = getSubjects();
+  const subjects =
+    getSubjects();
 
   return `
     <section class="page study-page">
-      ${renderHeader("Estudiar", "MODO CONCENTRACIÓN")}
+      ${renderHeader(
+        "Estudiar",
+        "MODO CONCENTRACIÓN"
+      )}
 
       <section class="pomodoro-card">
-        <p class="section-label">TEMPORIZADOR</p>
-        <h2>Sesión de concentración</h2>
+        <p class="section-label">
+          TEMPORIZADOR
+        </p>
+
+        <h2>
+          Sesión de concentración
+        </h2>
 
         <div class="pomodoro-modes">
-          <button class="pomodoro-mode active" data-minutes="25">
+          <button
+            type="button"
+            class="pomodoro-mode ${
+              selectedPomodoroMinutes === 25
+                ? "active"
+                : ""
+            }"
+            data-minutes="25"
+          >
             Pomodoro
             <span>25 min</span>
           </button>
 
-          <button class="pomodoro-mode" data-minutes="50">
+          <button
+            type="button"
+            class="pomodoro-mode ${
+              selectedPomodoroMinutes === 50
+                ? "active"
+                : ""
+            }"
+            data-minutes="50"
+          >
             Profundo
             <span>50 min</span>
           </button>
 
-          <button class="pomodoro-mode" data-minutes="15">
+          <button
+            type="button"
+            class="pomodoro-mode ${
+              selectedPomodoroMinutes === 15
+                ? "active"
+                : ""
+            }"
+            data-minutes="15"
+          >
             Repaso
             <span>15 min</span>
           </button>
         </div>
 
-        <div class="pomodoro-clock" id="pomodoro-clock">
-          ${formatTimer(pomodoroSeconds)}
+        <div
+          class="pomodoro-clock"
+          id="pomodoro-clock"
+        >
+          ${formatTimer(
+            pomodoroSeconds
+          )}
         </div>
 
-        <p class="pomodoro-status" id="pomodoro-status">
+        <p
+          class="pomodoro-status"
+          id="pomodoro-status"
+        >
           Elige una materia y comienza.
         </p>
 
-        <select id="pomodoro-subject" class="app-select">
-          <option value="">Seleccionar materia</option>
+        <select
+          id="pomodoro-subject"
+          class="app-select"
+        >
+          <option value="">
+            Seleccionar materia
+          </option>
+
           ${subjects
-            .map(
-              (subject) => `
-                <option value="${escapeHTML(subject.name)}">
-                  ${escapeHTML(subject.name)}
+            .map((subject) => {
+              return `
+                <option
+                  value="${escapeHTML(
+                    subject.name
+                  )}"
+                >
+                  ${escapeHTML(
+                    subject.name
+                  )}
                 </option>
-              `
-            )
+              `;
+            })
             .join("")}
         </select>
 
         <div class="pomodoro-actions">
-          <button class="primary-button" id="pomodoro-start">
-            <span class="material-symbols-rounded">play_arrow</span>
+          <button
+            type="button"
+            class="primary-button"
+            id="pomodoro-start"
+          >
+            <span class="material-symbols-rounded">
+              play_arrow
+            </span>
+
             Comenzar
           </button>
 
-          <button class="secondary-button" id="pomodoro-reset">
+          <button
+            type="button"
+            class="secondary-button"
+            id="pomodoro-reset"
+          >
             Reiniciar
           </button>
         </div>
@@ -1307,41 +1836,64 @@ function renderStudyPage() {
       <section class="section-block">
         <div class="section-title-row">
           <div>
-            <p class="section-label">REFUERZO</p>
+            <p class="section-label">
+              REFUERZO
+            </p>
+
             <h2>Mis materias</h2>
           </div>
         </div>
 
         <div class="subjects-grid">
           ${subjects
-            .map(
-              (subject) => `
+            .map((subject) => {
+              return `
                 <article class="subject-progress-card">
                   <div class="subject-progress-heading">
                     <div>
-                      <h3>${escapeHTML(subject.name)}</h3>
-                      <p>${escapeHTML(subject.level)}</p>
+                      <h3>
+                        ${escapeHTML(
+                          subject.name
+                        )}
+                      </h3>
+
+                      <p>
+                        ${escapeHTML(
+                          subject.level
+                        )}
+                      </p>
                     </div>
 
-                    <strong>${subject.confidence}%</strong>
+                    <strong>
+                      ${subject.confidence}%
+                    </strong>
                   </div>
 
                   <div class="progress-track">
                     <div
-                      class="progress-fill subject-${subject.color}"
-                      style="width: ${subject.confidence}%"
+                      class="
+                        progress-fill
+                        subject-${subject.color}
+                      "
+                      style="
+                        width:
+                        ${subject.confidence}%;
+                      "
                     ></div>
                   </div>
 
                   <button
+                    type="button"
                     class="subject-study-button"
-                    data-study-subject="${escapeHTML(subject.name)}"
+                    data-study-subject="${escapeHTML(
+                      subject.name
+                    )}"
                   >
                     Iniciar repaso
                   </button>
                 </article>
-              `
-            )
+              `;
+            })
             .join("")}
         </div>
       </section>
@@ -1350,21 +1902,34 @@ function renderStudyPage() {
 }
 
 function formatTimer(totalSeconds) {
-  const minutes = Math.floor(totalSeconds / 60);
-  const seconds = totalSeconds % 60;
+  const minutes =
+    Math.floor(
+      totalSeconds / 60
+    );
 
-  return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(
-    2,
-    "0"
-  )}`;
+  const seconds =
+    totalSeconds % 60;
+
+  return `
+    ${String(minutes).padStart(2, "0")}:
+    ${String(seconds).padStart(2, "0")}
+  `.replace(/\s/g, "");
 }
 
 function startPomodoro() {
-  const subjectSelect = document.getElementById("pomodoro-subject");
-  const selectedSubject = subjectSelect?.value;
+  const subjectSelect =
+    document.getElementById(
+      "pomodoro-subject"
+    );
+
+  const selectedSubject =
+    subjectSelect?.value;
 
   if (!selectedSubject) {
-    showToast("Selecciona una materia antes de comenzar.");
+    showToast(
+      "Selecciona una materia antes de comenzar."
+    );
+
     return;
   }
 
@@ -1375,307 +1940,611 @@ function startPomodoro() {
 
   pomodoroRunning = true;
 
-  const startButton = document.getElementById("pomodoro-start");
-  const status = document.getElementById("pomodoro-status");
+  const startButton =
+    document.getElementById(
+      "pomodoro-start"
+    );
+
+  const status =
+    document.getElementById(
+      "pomodoro-status"
+    );
 
   if (startButton) {
     startButton.innerHTML = `
-      <span class="material-symbols-rounded">pause</span>
+      <span class="material-symbols-rounded">
+        pause
+      </span>
+
       Pausar
     `;
   }
 
   if (status) {
-    status.textContent = `Estudiando ${selectedSubject}`;
+    status.textContent =
+      `Estudiando ${selectedSubject}`;
   }
 
-  pomodoroInterval = setInterval(() => {
-    pomodoroSeconds--;
+  pomodoroInterval =
+    setInterval(() => {
+      pomodoroSeconds--;
 
-    const clock = document.getElementById("pomodoro-clock");
+      const clock =
+        document.getElementById(
+          "pomodoro-clock"
+        );
 
-    if (clock) {
-      clock.textContent = formatTimer(pomodoroSeconds);
-    }
+      if (clock) {
+        clock.textContent =
+          formatTimer(
+            pomodoroSeconds
+          );
+      }
 
-    if (pomodoroSeconds <= 0) {
-      completePomodoro(selectedSubject);
-    }
-  }, 1000);
+      if (pomodoroSeconds <= 0) {
+        completePomodoro(
+          selectedSubject
+        );
+      }
+    }, 1000);
 }
 
 function pausePomodoro() {
   pomodoroRunning = false;
-  clearInterval(pomodoroInterval);
 
-  const startButton = document.getElementById("pomodoro-start");
-  const status = document.getElementById("pomodoro-status");
+  clearInterval(
+    pomodoroInterval
+  );
+
+  const startButton =
+    document.getElementById(
+      "pomodoro-start"
+    );
+
+  const status =
+    document.getElementById(
+      "pomodoro-status"
+    );
 
   if (startButton) {
     startButton.innerHTML = `
-      <span class="material-symbols-rounded">play_arrow</span>
+      <span class="material-symbols-rounded">
+        play_arrow
+      </span>
+
       Continuar
     `;
   }
 
   if (status) {
-    status.textContent = "Sesión pausada";
+    status.textContent =
+      "Sesión pausada";
   }
 }
 
 function resetPomodoro() {
-  clearInterval(pomodoroInterval);
+  clearInterval(
+    pomodoroInterval
+  );
 
   pomodoroRunning = false;
-  pomodoroSeconds = selectedPomodoroMinutes * 60;
 
-  const clock = document.getElementById("pomodoro-clock");
-  const status = document.getElementById("pomodoro-status");
-  const startButton = document.getElementById("pomodoro-start");
+  pomodoroSeconds =
+    selectedPomodoroMinutes * 60;
 
-  if (clock) clock.textContent = formatTimer(pomodoroSeconds);
-  if (status) status.textContent = "Elige una materia y comienza.";
+  const clock =
+    document.getElementById(
+      "pomodoro-clock"
+    );
+
+  const status =
+    document.getElementById(
+      "pomodoro-status"
+    );
+
+  const startButton =
+    document.getElementById(
+      "pomodoro-start"
+    );
+
+  if (clock) {
+    clock.textContent =
+      formatTimer(
+        pomodoroSeconds
+      );
+  }
+
+  if (status) {
+    status.textContent =
+      "Elige una materia y comienza.";
+  }
 
   if (startButton) {
     startButton.innerHTML = `
-      <span class="material-symbols-rounded">play_arrow</span>
+      <span class="material-symbols-rounded">
+        play_arrow
+      </span>
+
       Comenzar
     `;
   }
 }
 
 function completePomodoro(subject) {
-  clearInterval(pomodoroInterval);
+  clearInterval(
+    pomodoroInterval
+  );
+
   pomodoroRunning = false;
 
-  const totalStudyTime = getStorage(STORAGE_KEYS.studyTime, 0);
+  const totalStudyTime =
+    getStorage(
+      STORAGE_KEYS.studyTime,
+      0
+    );
+
   setStorage(
     STORAGE_KEYS.studyTime,
-    totalStudyTime + selectedPomodoroMinutes
+    totalStudyTime +
+      selectedPomodoroMinutes
   );
 
   showToast(
-    `¡Completaste ${selectedPomodoroMinutes} minutos de ${subject}!`
+    `Completaste ${selectedPomodoroMinutes} minutos de ${subject}.`
   );
 
   resetPomodoro();
 }
 
-// ==========================================
-// PÁGINA DE PERFIL
-// ==========================================
+// ======================================================
+// PERFIL
+// ======================================================
 
 function renderProfilePage() {
-  const settings = getSettings();
-  const totalStudyTime = getStorage(STORAGE_KEYS.studyTime, 0);
-  const tasks = getTasks();
-  const completedTasks = tasks.filter((task) => task.completed).length;
+  const settings =
+    getSettings();
+
+  const totalStudyTime =
+    getStorage(
+      STORAGE_KEYS.studyTime,
+      0
+    );
+
+  const tasks =
+    getTasks();
+
+  const completedTasks =
+    tasks.filter((task) => {
+      return task.completed;
+    }).length;
 
   return `
     <section class="page profile-page">
-      ${renderHeader("Perfil", "CONFIGURACIÓN")}
+      ${renderHeader(
+        "Perfil",
+        "CONFIGURACIÓN"
+      )}
 
       <section class="profile-card">
         <div class="profile-avatar">
-          ${escapeHTML(settings.name.charAt(0).toUpperCase())}
+          ${escapeHTML(
+            settings.name
+              .charAt(0)
+              .toUpperCase()
+          )}
         </div>
 
         <div>
-          <h2>${escapeHTML(settings.name)}</h2>
-          <p>${escapeHTML(settings.course)}</p>
+          <h2>
+            ${escapeHTML(settings.name)}
+          </h2>
+
+          <p>
+            ${escapeHTML(settings.course)}
+          </p>
         </div>
       </section>
 
       <section class="profile-statistics">
         <article>
-          <strong>${totalStudyTime}</strong>
-          <span>Minutos estudiados</span>
+          <strong>
+            ${totalStudyTime}
+          </strong>
+
+          <span>
+            Minutos estudiados
+          </span>
         </article>
 
         <article>
-          <strong>${completedTasks}</strong>
-          <span>Tareas terminadas</span>
+          <strong>
+            ${completedTasks}
+          </strong>
+
+          <span>
+            Tareas terminadas
+          </span>
         </article>
       </section>
 
-      <form id="profile-form" class="settings-form">
+      <form
+        id="profile-form"
+        class="settings-form"
+      >
         <div class="form-group">
-          <label for="profile-name">Nombre</label>
+          <label for="profile-name">
+            Nombre
+          </label>
+
           <input
             id="profile-name"
             type="text"
-            value="${escapeHTML(settings.name)}"
+            value="${escapeHTML(
+              settings.name
+            )}"
             required
           />
         </div>
 
         <div class="form-group">
-          <label for="profile-course">Curso</label>
+          <label for="profile-course">
+            Curso
+          </label>
+
           <input
             id="profile-course"
             type="text"
-            value="${escapeHTML(settings.course)}"
+            value="${escapeHTML(
+              settings.course
+            )}"
           />
         </div>
 
         <div class="form-group">
-          <label for="profile-school">Colegio</label>
+          <label for="profile-school">
+            Colegio
+          </label>
+
           <input
             id="profile-school"
             type="text"
-            value="${escapeHTML(settings.school)}"
+            value="${escapeHTML(
+              settings.school
+            )}"
           />
         </div>
 
         <label class="setting-switch">
           <div>
-            <strong>Notificaciones</strong>
-            <span>Recordatorios de clases y tareas</span>
+            <strong>
+              Notificaciones
+            </strong>
+
+            <span>
+              Recordatorios de clases y tareas
+            </span>
           </div>
 
           <input
             id="profile-notifications"
             type="checkbox"
-            ${settings.notifications ? "checked" : ""}
+            ${
+              settings.notifications
+                ? "checked"
+                : ""
+            }
           />
 
           <span class="switch-slider"></span>
         </label>
 
-        <button type="submit" class="primary-button full-width">
+        <button
+          type="submit"
+          class="primary-button full-width"
+        >
           Guardar cambios
         </button>
       </form>
 
-      <button class="danger-button" id="clear-data-button">
+      <button
+        type="button"
+        class="danger-button"
+        id="clear-data-button"
+      >
         Borrar todos los datos
       </button>
     </section>
   `;
 }
 
-// ==========================================
+// ======================================================
 // NAVEGACIÓN
-// ==========================================
+// ======================================================
 
 function renderBottomNavigation() {
   return `
     <nav class="bottom-navigation">
-      ${renderNavButton("home", "home", "Hoy")}
-      ${renderNavButton("calendar", "calendar_month", "Calendario")}
-      ${renderNavButton("tasks", "checklist", "Tareas")}
-      ${renderNavButton("study", "timer", "Estudiar")}
-      ${renderNavButton("profile", "person", "Perfil")}
+      ${renderNavButton(
+        "home",
+        "home",
+        "Hoy"
+      )}
+
+      ${renderNavButton(
+        "calendar",
+        "calendar_month",
+        "Calendario"
+      )}
+
+      ${renderNavButton(
+        "tasks",
+        "checklist",
+        "Tareas"
+      )}
+
+      ${renderNavButton(
+        "study",
+        "timer",
+        "Estudiar"
+      )}
+
+      ${renderNavButton(
+        "profile",
+        "person",
+        "Perfil"
+      )}
     </nav>
   `;
 }
 
-function renderNavButton(page, icon, label) {
+function renderNavButton(
+  page,
+  icon,
+  label
+) {
   return `
-    <button class="nav-button" data-page="${page}">
-      <span class="material-symbols-rounded">${icon}</span>
-      <span>${label}</span>
+    <button
+      type="button"
+      class="nav-button"
+      data-page="${page}"
+    >
+      <span class="material-symbols-rounded">
+        ${icon}
+      </span>
+
+      <span>
+        ${label}
+      </span>
     </button>
   `;
 }
 
 function updateNavigationState() {
-  document.querySelectorAll(".nav-button").forEach((button) => {
-    button.classList.toggle(
-      "active",
-      button.dataset.page === currentPage
-    );
-  });
+  document
+    .querySelectorAll(".nav-button")
+    .forEach((button) => {
+      button.classList.toggle(
+        "active",
+        button.dataset.page ===
+          currentPage
+      );
+    });
 
-  const floatingButton = document.getElementById("floating-add-button");
+  const floatingButton =
+    document.getElementById(
+      "floating-add-button"
+    );
 
   if (floatingButton) {
     floatingButton.style.display =
-      currentPage === "tasks" || currentPage === "home"
+      currentPage === "tasks" ||
+      currentPage === "home"
         ? "flex"
         : "none";
   }
 }
 
-// ==========================================
+// ======================================================
 // MODAL PARA AGREGAR TAREA
-// ==========================================
+// CORREGIDO: LA X AHORA CIERRA CORRECTAMENTE
+// ======================================================
 
 function openTaskModal() {
-  const modalContainer = document.getElementById("modal-container");
+  const modalContainer =
+    document.getElementById(
+      "modal-container"
+    );
+
+  if (!modalContainer) {
+    console.error(
+      "No se encontró modal-container."
+    );
+
+    return;
+  }
 
   modalContainer.innerHTML = `
-    <div class="modal-overlay" id="task-modal-overlay">
-      <section class="app-modal">
+    <div
+      class="modal-overlay"
+      id="task-modal-overlay"
+    >
+      <section
+        class="app-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="task-modal-title"
+      >
         <div class="modal-header">
           <div>
-            <p class="section-label">NUEVA</p>
-            <h2>Agregar tarea</h2>
+            <p class="section-label">
+              NUEVO PENDIENTE
+            </p>
+
+            <h2 id="task-modal-title">
+              Agregar tarea
+            </h2>
           </div>
 
-          <button class="modal-close-button" id="close-task-modal">
-            <span class="material-symbols-rounded">close</span>
+          <button
+            type="button"
+            class="modal-close-button"
+            id="close-task-modal"
+            aria-label="Cerrar ventana"
+          >
+            <span class="material-symbols-rounded">
+              close
+            </span>
           </button>
         </div>
 
         <form id="task-form">
           <div class="form-group">
-            <label for="task-title">Nombre de la tarea</label>
+            <label for="task-title">
+              Nombre de la tarea
+            </label>
+
             <input
               id="task-title"
               type="text"
               placeholder="Ejemplo: Guía de Física"
+              autocomplete="off"
               required
             />
           </div>
 
           <div class="form-group">
-            <label for="task-subject">Asignatura</label>
-            <select id="task-subject" required>
-              <option value="">Seleccionar</option>
-              <option>Matemáticas</option>
-              <option>Física</option>
-              <option>Lenguaje</option>
-              <option>Inglés</option>
-              <option>Economía</option>
-              <option>Teatro</option>
-              <option>Educación Ciudadana</option>
-              <option>Teoría del Conocimiento</option>
-              <option>Química</option>
-              <option>Historia</option>
-              <option>Comprensión Lectora</option>
-              <option>Matemática M1</option>
-              <option>Otra</option>
-            </select>
-          </div>
+            <label for="task-subject">
+              Asignatura
+            </label>
 
-          <div class="form-group">
-            <label for="task-description">Descripción</label>
-            <textarea
-              id="task-description"
-              rows="3"
-              placeholder="Detalles importantes"
-            ></textarea>
+            <select
+              id="task-subject"
+              required
+            >
+              <option value="">
+                Seleccionar asignatura
+              </option>
+
+              <option value="Matemáticas">
+                Matemáticas
+              </option>
+
+              <option value="Física">
+                Física
+              </option>
+
+              <option value="Lenguaje">
+                Lenguaje
+              </option>
+
+              <option value="Inglés">
+                Inglés
+              </option>
+
+              <option value="Economía">
+                Economía
+              </option>
+
+              <option value="Teatro">
+                Teatro
+              </option>
+
+              <option value="Educación Ciudadana">
+                Educación Ciudadana
+              </option>
+
+              <option value="Teoría del Conocimiento">
+                Teoría del Conocimiento
+              </option>
+
+              <option value="Química">
+                Química
+              </option>
+
+              <option value="Historia">
+                Historia
+              </option>
+
+              <option value="Comprensión Lectora">
+                Comprensión Lectora
+              </option>
+
+              <option value="Matemática M1">
+                Matemática M1
+              </option>
+
+              <option value="Otra">
+                Otra
+              </option>
+            </select>
           </div>
 
           <div class="form-row">
             <div class="form-group">
-              <label for="task-date">Entrega</label>
-              <input id="task-date" type="date" required />
+              <label for="task-date">
+                Fecha de entrega
+              </label>
+
+              <input
+                id="task-date"
+                type="date"
+                required
+              />
             </div>
 
             <div class="form-group">
-              <label for="task-priority">Prioridad</label>
+              <label for="task-priority">
+                Prioridad
+              </label>
+
               <select id="task-priority">
-                <option value="media">Media</option>
-                <option value="urgente">Urgente</option>
-                <option value="alta">Alta</option>
-                <option value="baja">Baja</option>
+                <option value="media">
+                  Media
+                </option>
+
+                <option value="urgente">
+                  Urgente
+                </option>
+
+                <option value="alta">
+                  Alta
+                </option>
+
+                <option value="baja">
+                  Baja
+                </option>
               </select>
             </div>
           </div>
 
-          <button type="submit" class="primary-button full-width">
+          <div class="form-group">
+            <label for="task-description">
+              Descripción
+            </label>
+
+            <textarea
+              id="task-description"
+              rows="4"
+              placeholder="Agrega instrucciones o detalles"
+            ></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="task-link">
+              Enlace
+            </label>
+
+            <input
+              id="task-link"
+              type="url"
+              placeholder="Classroom, guía o material"
+            />
+          </div>
+
+          <button
+            type="submit"
+            class="primary-button full-width"
+          >
             Guardar tarea
           </button>
         </form>
@@ -1683,41 +2552,196 @@ function openTaskModal() {
     </div>
   `;
 
-  document
-    .getElementById("close-task-modal")
-    ?.addEventListener("click", closeTaskModal);
+  document.body.classList.add(
+    "modal-open"
+  );
 
-  document
-    .getElementById("task-modal-overlay")
-    ?.addEventListener("click", (event) => {
-      if (event.target.id === "task-modal-overlay") {
+  const closeButton =
+    document.getElementById(
+      "close-task-modal"
+    );
+
+  const overlay =
+    document.getElementById(
+      "task-modal-overlay"
+    );
+
+  const modal =
+    overlay?.querySelector(
+      ".app-modal"
+    );
+
+  const taskForm =
+    document.getElementById(
+      "task-form"
+    );
+
+  const titleInput =
+    document.getElementById(
+      "task-title"
+    );
+
+  // Cerrar usando la cruz.
+  closeButton?.addEventListener(
+    "click",
+    (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+
+      closeTaskModal();
+    }
+  );
+
+  // Cerrar haciendo clic en el fondo.
+  overlay?.addEventListener(
+    "click",
+    (event) => {
+      if (event.target === overlay) {
         closeTaskModal();
       }
-    });
+    }
+  );
 
-  document
-    .getElementById("task-form")
-    ?.addEventListener("submit", createTask);
+  // Evita cerrar al hacer clic dentro.
+  modal?.addEventListener(
+    "click",
+    (event) => {
+      event.stopPropagation();
+    }
+  );
+
+  taskForm?.addEventListener(
+    "submit",
+    createTask
+  );
+
+  setTimeout(() => {
+    titleInput?.focus();
+  }, 100);
 }
 
 function closeTaskModal() {
-  const modalContainer = document.getElementById("modal-container");
+  const modalContainer =
+    document.getElementById(
+      "modal-container"
+    );
 
   if (modalContainer) {
     modalContainer.innerHTML = "";
+  }
+
+  document.body.classList.remove(
+    "modal-open"
+  );
+}
+
+function closeTaskModalWithEscape(
+  event
+) {
+  if (event.key !== "Escape") {
+    return;
+  }
+
+  const modal =
+    document.getElementById(
+      "task-modal-overlay"
+    );
+
+  if (modal) {
+    closeTaskModal();
   }
 }
 
 function createTask(event) {
   event.preventDefault();
 
-  const title = document.getElementById("task-title").value.trim();
-  const subject = document.getElementById("task-subject").value;
-  const description = document
-    .getElementById("task-description")
-    .value.trim();
-  const date = document.getElementById("task-date").value;
-  const priority = document.getElementById("task-priority").value;
+  const titleInput =
+    document.getElementById(
+      "task-title"
+    );
+
+  const subjectInput =
+    document.getElementById(
+      "task-subject"
+    );
+
+  const descriptionInput =
+    document.getElementById(
+      "task-description"
+    );
+
+  const dateInput =
+    document.getElementById(
+      "task-date"
+    );
+
+  const priorityInput =
+    document.getElementById(
+      "task-priority"
+    );
+
+  const linkInput =
+    document.getElementById(
+      "task-link"
+    );
+
+  const title =
+    titleInput?.value.trim() || "";
+
+  const subject =
+    subjectInput?.value || "";
+
+  const description =
+    descriptionInput?.value.trim() ||
+    "";
+
+  const date =
+    dateInput?.value || "";
+
+  const priority =
+    priorityInput?.value || "media";
+
+  const link =
+    linkInput?.value.trim() || "";
+
+  if (!title) {
+    showToast(
+      "Escribe el nombre de la tarea."
+    );
+
+    titleInput?.focus();
+    return;
+  }
+
+  if (!subject) {
+    showToast(
+      "Selecciona una asignatura."
+    );
+
+    subjectInput?.focus();
+    return;
+  }
+
+  if (!date) {
+    showToast(
+      "Selecciona una fecha de entrega."
+    );
+
+    dateInput?.focus();
+    return;
+  }
+
+  if (
+    link &&
+    !isValidHttpUrl(link)
+  ) {
+    showToast(
+      "El enlace debe comenzar con http:// o https://"
+    );
+
+    linkInput?.focus();
+    return;
+  }
 
   const tasks = getTasks();
 
@@ -1728,459 +2752,929 @@ function createTask(event) {
     description,
     date,
     priority,
+    link,
     completed: false,
-    createdAt: new Date().toISOString(),
+    createdAt:
+      new Date().toISOString()
   });
 
   saveTasks(tasks);
+
   closeTaskModal();
-  showToast("Tarea guardada correctamente.");
+
+  showToast(
+    "Tarea guardada correctamente."
+  );
+
   renderCurrentPage();
 }
 
 function toggleTask(taskId) {
-  const tasks = getTasks().map((task) => {
-    if (String(task.id) === String(taskId)) {
-      return {
-        ...task,
-        completed: !task.completed,
-      };
-    }
+  const tasks =
+    getTasks().map((task) => {
+      if (
+        String(task.id) ===
+        String(taskId)
+      ) {
+        return {
+          ...task,
+          completed:
+            !task.completed
+        };
+      }
 
-    return task;
-  });
+      return task;
+    });
 
   saveTasks(tasks);
   renderCurrentPage();
 }
 
 function deleteTask(taskId) {
-  const confirmed = confirm(
-    "¿Seguro que quieres eliminar esta tarea?"
-  );
+  const confirmed =
+    window.confirm(
+      "¿Seguro que quieres eliminar esta tarea?"
+    );
 
-  if (!confirmed) return;
+  if (!confirmed) {
+    return;
+  }
 
-  const tasks = getTasks().filter(
-    (task) => String(task.id) !== String(taskId)
-  );
+  const tasks =
+    getTasks().filter((task) => {
+      return (
+        String(task.id) !==
+        String(taskId)
+      );
+    });
 
   saveTasks(tasks);
-  showToast("Tarea eliminada.");
+
+  showToast(
+    "Tarea eliminada."
+  );
+
   renderCurrentPage();
 }
 
-// ==========================================
-// RECOMENDACIÓN ¿QUÉ HAGO AHORA?
-// ==========================================
+// ======================================================
+// RECOMENDACIÓN
+// ======================================================
 
 function recommendTask() {
-  const pendingTasks = getTasks()
-    .filter((task) => !task.completed)
-    .sort((a, b) => {
-      const priorityOrder = {
-        urgente: 1,
-        alta: 2,
-        media: 3,
-        baja: 4,
-      };
+  const priorityOrder = {
+    urgente: 1,
+    alta: 2,
+    media: 3,
+    baja: 4
+  };
 
-      const priorityDifference =
-        priorityOrder[a.priority] - priorityOrder[b.priority];
+  const pendingTasks =
+    getTasks()
+      .filter((task) => {
+        return !task.completed;
+      })
+      .sort((first, second) => {
+        const priorityDifference =
+          priorityOrder[
+            first.priority
+          ] -
+          priorityOrder[
+            second.priority
+          ];
 
-      if (priorityDifference !== 0) return priorityDifference;
+        if (
+          priorityDifference !== 0
+        ) {
+          return priorityDifference;
+        }
 
-      return new Date(a.date) - new Date(b.date);
-    });
+        return (
+          new Date(first.date) -
+          new Date(second.date)
+        );
+      });
 
-  if (pendingTasks.length === 0) {
+  if (
+    pendingTasks.length === 0
+  ) {
     showRecommendationModal(
       "No tienes tareas pendientes",
-      "Puedes hacer un repaso rápido de Física o Matemáticas durante 20 minutos."
+      "Puedes hacer un repaso de Física o Matemáticas durante 20 minutos."
     );
 
     return;
   }
 
-  const task = pendingTasks[0];
-  const daysRemaining = calculateDaysRemaining(task.date);
+  const task =
+    pendingTasks[0];
+
+  const daysRemaining =
+    calculateDaysRemaining(
+      task.date
+    );
+
+  const urgencyMessage =
+    daysRemaining <= 1
+      ? "Esta tarea tiene una fecha de entrega muy cercana."
+      : `Faltan ${daysRemaining} días para la entrega.`;
 
   showRecommendationModal(
     `Trabaja en ${task.title}`,
-    `Dedica 25 minutos a ${task.subject}. ${
-      daysRemaining <= 1
-        ? "Esta tarea tiene una fecha de entrega muy cercana."
-        : `Faltan ${daysRemaining} días para la entrega.`
-    }`
+    `Dedica 25 minutos a ${task.subject}. ${urgencyMessage}`
   );
 }
 
-function showRecommendationModal(title, message) {
-  const modalContainer = document.getElementById("modal-container");
+function showRecommendationModal(
+  title,
+  message
+) {
+  const modalContainer =
+    document.getElementById(
+      "modal-container"
+    );
+
+  if (!modalContainer) {
+    return;
+  }
 
   modalContainer.innerHTML = `
-    <div class="modal-overlay" id="recommendation-overlay">
-      <section class="app-modal recommendation-modal">
+    <div
+      class="modal-overlay"
+      id="recommendation-overlay"
+    >
+      <section
+        class="
+          app-modal
+          recommendation-modal
+        "
+      >
         <div class="recommendation-icon">
-          <span class="material-symbols-rounded">auto_awesome</span>
+          <span class="material-symbols-rounded">
+            auto_awesome
+          </span>
         </div>
 
-        <p class="section-label">RECOMENDACIÓN</p>
-        <h2>${escapeHTML(title)}</h2>
-        <p>${escapeHTML(message)}</p>
+        <p class="section-label">
+          RECOMENDACIÓN
+        </p>
 
-        <button class="primary-button full-width" id="accept-recommendation">
+        <h2>
+          ${escapeHTML(title)}
+        </h2>
+
+        <p>
+          ${escapeHTML(message)}
+        </p>
+
+        <button
+          type="button"
+          class="primary-button full-width"
+          id="accept-recommendation"
+        >
           Comenzar ahora
         </button>
 
-        <button class="secondary-button full-width" id="close-recommendation">
+        <button
+          type="button"
+          class="secondary-button full-width"
+          id="close-recommendation"
+        >
           Cerrar
         </button>
       </section>
     </div>
   `;
 
+  document.body.classList.add(
+    "modal-open"
+  );
+
+  const overlay =
+    document.getElementById(
+      "recommendation-overlay"
+    );
+
+  const closeButton =
+    document.getElementById(
+      "close-recommendation"
+    );
+
+  const acceptButton =
+    document.getElementById(
+      "accept-recommendation"
+    );
+
+  overlay?.addEventListener(
+    "click",
+    (event) => {
+      if (event.target === overlay) {
+        closeTaskModal();
+      }
+    }
+  );
+
+  closeButton?.addEventListener(
+    "click",
+    closeTaskModal
+  );
+
+  acceptButton?.addEventListener(
+    "click",
+    () => {
+      closeTaskModal();
+
+      currentPage = "study";
+
+      selectedPomodoroMinutes = 25;
+      pomodoroSeconds = 25 * 60;
+
+      renderCurrentPage();
+    }
+  );
+}
+
+// ======================================================
+// EVENTOS GENERALES
+// ======================================================
+
+function attachGlobalEvents() {
   document
-    .getElementById("close-recommendation")
-    ?.addEventListener("click", () => {
-      modalContainer.innerHTML = "";
+    .querySelectorAll(".nav-button")
+    .forEach((button) => {
+      button.addEventListener(
+        "click",
+        () => {
+          currentPage =
+            button.dataset.page;
+
+          renderCurrentPage();
+
+          window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+          });
+        }
+      );
     });
 
   document
-    .getElementById("accept-recommendation")
-    ?.addEventListener("click", () => {
-      modalContainer.innerHTML = "";
-      currentPage = "study";
-      pomodoroSeconds = 25 * 60;
-      selectedPomodoroMinutes = 25;
-      renderCurrentPage();
+    .getElementById(
+      "floating-add-button"
+    )
+    ?.addEventListener(
+      "click",
+      openTaskModal
+    );
+
+  document
+    .querySelectorAll(
+      "[data-go-page]"
+    )
+    .forEach((button) => {
+      button.addEventListener(
+        "click",
+        () => {
+          currentPage =
+            button.dataset.goPage;
+
+          renderCurrentPage();
+
+          window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+          });
+        }
+      );
     });
 }
 
-// ==========================================
-// EVENTOS
-// ==========================================
-
-function attachGlobalEvents() {
-  document.querySelectorAll(".nav-button").forEach((button) => {
-    button.addEventListener("click", () => {
-      currentPage = button.dataset.page;
-      renderCurrentPage();
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    });
-  });
-
+function attachHeaderEvents() {
   document
-    .getElementById("floating-add-button")
-    ?.addEventListener("click", openTaskModal);
-
-  document.querySelectorAll("[data-go-page]").forEach((button) => {
-    button.addEventListener("click", () => {
-      currentPage = button.dataset.goPage;
-      renderCurrentPage();
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    });
-  });
-
-  document
-    .getElementById("notification-button")
-    ?.addEventListener("click", requestNotifications);
+    .getElementById(
+      "notification-button"
+    )
+    ?.addEventListener(
+      "click",
+      requestNotifications
+    );
 }
 
 function attachHomeEvents() {
-  document
-    .querySelector('[data-action="start-pomodoro"]')
-    ?.addEventListener("click", () => {
-      currentPage = "study";
-      renderCurrentPage();
-    });
+  attachHeaderEvents();
 
   document
-    .querySelector('[data-action="what-now"]')
-    ?.addEventListener("click", recommendTask);
-
-  document
-    .querySelector('[data-action="new-task"]')
-    ?.addEventListener("click", openTaskModal);
-
-  document
-    .querySelector('[data-action="show-preu"]')
-    ?.addEventListener("click", () => {
-      document
-        .getElementById("preuniversity-section")
-        ?.scrollIntoView({ behavior: "smooth" });
-    });
-
-  document.querySelectorAll("[data-task-complete]").forEach((button) => {
-    button.addEventListener("click", () => {
-      toggleTask(button.dataset.taskComplete);
-    });
-  });
-
-  document.querySelectorAll('[data-action="study-subject"]').forEach(
-    (button) => {
-      button.addEventListener("click", () => {
+    .querySelector(
+      '[data-action="start-pomodoro"]'
+    )
+    ?.addEventListener(
+      "click",
+      () => {
         currentPage = "study";
         renderCurrentPage();
+      }
+    );
 
-        setTimeout(() => {
-          const select = document.getElementById("pomodoro-subject");
+  document
+    .querySelector(
+      '[data-action="what-now"]'
+    )
+    ?.addEventListener(
+      "click",
+      recommendTask
+    );
 
-          if (select) {
-            select.value = button.dataset.subject;
-          }
-        }, 0);
-      });
-    }
-  );
+  document
+    .querySelector(
+      '[data-action="new-task"]'
+    )
+    ?.addEventListener(
+      "click",
+      openTaskModal
+    );
 
-  document.querySelectorAll('[data-action="prepare-preu"]').forEach(
-    (button) => {
-      button.addEventListener("click", () => {
-        showToast(
-          `Prepárate para ${button.dataset.subject}: revisa tu guía y materiales.`
-        );
-      });
-    }
-  );
+  document
+    .querySelector(
+      '[data-action="show-preu"]'
+    )
+    ?.addEventListener(
+      "click",
+      () => {
+        document
+          .getElementById(
+            "preuniversity-section"
+          )
+          ?.scrollIntoView({
+            behavior: "smooth"
+          });
+      }
+    );
 
-  document.querySelectorAll('[data-action="add-classroom"]').forEach(
-    (button) => {
-      button.addEventListener("click", () => {
-        const link = prompt(
-          `Pega el enlace de Classroom de ${button.dataset.subject}:`
-        );
-
-        if (link) {
-          showToast(
-            "Enlace recibido. La sincronización permanente se agregará en una próxima versión."
+  document
+    .querySelectorAll(
+      "[data-task-complete]"
+    )
+    .forEach((button) => {
+      button.addEventListener(
+        "click",
+        () => {
+          toggleTask(
+            button.dataset
+              .taskComplete
           );
         }
-      });
-    }
-  );
+      );
+    });
+
+  document
+    .querySelectorAll(
+      '[data-action="study-subject"]'
+    )
+    .forEach((button) => {
+      button.addEventListener(
+        "click",
+        () => {
+          const subject =
+            button.dataset.subject;
+
+          currentPage = "study";
+
+          renderCurrentPage();
+
+          const select =
+            document.getElementById(
+              "pomodoro-subject"
+            );
+
+          if (select) {
+            select.value = subject;
+          }
+        }
+      );
+    });
+
+  document
+    .querySelectorAll(
+      '[data-action="prepare-preu"]'
+    )
+    .forEach((button) => {
+      button.addEventListener(
+        "click",
+        () => {
+          showToast(
+            `Prepárate para ${button.dataset.subject}: revisa tu guía y materiales.`
+          );
+        }
+      );
+    });
+
+  document
+    .querySelectorAll(
+      '[data-action="add-classroom"]'
+    )
+    .forEach((button) => {
+      button.addEventListener(
+        "click",
+        () => {
+          saveClassroomLink(
+            button.dataset.subject
+          );
+        }
+      );
+    });
 }
 
 function attachCalendarEvents() {
-  document.querySelectorAll(".calendar-tab").forEach((button) => {
-    button.addEventListener("click", () => {
-      document
-        .querySelectorAll(".calendar-tab")
-        .forEach((tab) => tab.classList.remove("active"));
+  attachHeaderEvents();
 
-      button.classList.add("active");
+  document
+    .querySelectorAll(
+      ".calendar-tab"
+    )
+    .forEach((button) => {
+      button.addEventListener(
+        "click",
+        () => {
+          document
+            .querySelectorAll(
+              ".calendar-tab"
+            )
+            .forEach((tab) => {
+              tab.classList.remove(
+                "active"
+              );
+            });
 
-      if (button.dataset.calendarView === "day") {
-        showToast(
-          "La vista diaria se encuentra en la pantalla Hoy."
-        );
-      }
+          button.classList.add(
+            "active"
+          );
+
+          if (
+            button.dataset
+              .calendarView === "day"
+          ) {
+            showToast(
+              "La vista diaria está disponible en la pantalla Hoy."
+            );
+          }
+        }
+      );
     });
-  });
 }
 
 function attachTaskEvents() {
+  attachHeaderEvents();
+
   document
-    .getElementById("new-task-button")
-    ?.addEventListener("click", openTaskModal);
+    .getElementById(
+      "new-task-button"
+    )
+    ?.addEventListener(
+      "click",
+      openTaskModal
+    );
 
-  document.querySelectorAll("[data-task-complete]").forEach((button) => {
-    button.addEventListener("click", () => {
-      toggleTask(button.dataset.taskComplete);
+  document
+    .querySelectorAll(
+      "[data-task-complete]"
+    )
+    .forEach((button) => {
+      button.addEventListener(
+        "click",
+        () => {
+          toggleTask(
+            button.dataset
+              .taskComplete
+          );
+        }
+      );
     });
-  });
 
-  document.querySelectorAll("[data-task-delete]").forEach((button) => {
-    button.addEventListener("click", () => {
-      deleteTask(button.dataset.taskDelete);
+  document
+    .querySelectorAll(
+      "[data-task-delete]"
+    )
+    .forEach((button) => {
+      button.addEventListener(
+        "click",
+        () => {
+          deleteTask(
+            button.dataset
+              .taskDelete
+          );
+        }
+      );
     });
-  });
 }
 
 function attachStudyEvents() {
-  document.querySelectorAll(".pomodoro-mode").forEach((button) => {
-    button.addEventListener("click", () => {
-      document
-        .querySelectorAll(".pomodoro-mode")
-        .forEach((item) => item.classList.remove("active"));
-
-      button.classList.add("active");
-
-      selectedPomodoroMinutes = Number(button.dataset.minutes);
-      pomodoroSeconds = selectedPomodoroMinutes * 60;
-
-      const clock = document.getElementById("pomodoro-clock");
-
-      if (clock) {
-        clock.textContent = formatTimer(pomodoroSeconds);
-      }
-
-      if (pomodoroRunning) {
-        resetPomodoro();
-      }
-    });
-  });
+  attachHeaderEvents();
 
   document
-    .getElementById("pomodoro-start")
-    ?.addEventListener("click", startPomodoro);
+    .querySelectorAll(
+      ".pomodoro-mode"
+    )
+    .forEach((button) => {
+      button.addEventListener(
+        "click",
+        () => {
+          document
+            .querySelectorAll(
+              ".pomodoro-mode"
+            )
+            .forEach((item) => {
+              item.classList.remove(
+                "active"
+              );
+            });
 
-  document
-    .getElementById("pomodoro-reset")
-    ?.addEventListener("click", resetPomodoro);
+          button.classList.add(
+            "active"
+          );
 
-  document.querySelectorAll("[data-study-subject]").forEach((button) => {
-    button.addEventListener("click", () => {
-      const select = document.getElementById("pomodoro-subject");
+          selectedPomodoroMinutes =
+            Number(
+              button.dataset.minutes
+            );
 
-      if (select) {
-        select.value = button.dataset.studySubject;
-      }
+          pomodoroSeconds =
+            selectedPomodoroMinutes *
+            60;
 
-      document
-        .querySelector(".pomodoro-card")
-        ?.scrollIntoView({ behavior: "smooth" });
+          if (pomodoroRunning) {
+            clearInterval(
+              pomodoroInterval
+            );
 
-      showToast(
-        `${button.dataset.studySubject} seleccionada para estudiar.`
+            pomodoroRunning = false;
+          }
+
+          const clock =
+            document.getElementById(
+              "pomodoro-clock"
+            );
+
+          if (clock) {
+            clock.textContent =
+              formatTimer(
+                pomodoroSeconds
+              );
+          }
+        }
       );
     });
-  });
+
+  document
+    .getElementById(
+      "pomodoro-start"
+    )
+    ?.addEventListener(
+      "click",
+      startPomodoro
+    );
+
+  document
+    .getElementById(
+      "pomodoro-reset"
+    )
+    ?.addEventListener(
+      "click",
+      resetPomodoro
+    );
+
+  document
+    .querySelectorAll(
+      "[data-study-subject]"
+    )
+    .forEach((button) => {
+      button.addEventListener(
+        "click",
+        () => {
+          const select =
+            document.getElementById(
+              "pomodoro-subject"
+            );
+
+          if (select) {
+            select.value =
+              button.dataset
+                .studySubject;
+          }
+
+          document
+            .querySelector(
+              ".pomodoro-card"
+            )
+            ?.scrollIntoView({
+              behavior: "smooth"
+            });
+
+          showToast(
+            `${button.dataset.studySubject} seleccionada para estudiar.`
+          );
+        }
+      );
+    });
 }
 
 function attachProfileEvents() {
-  document
-    .getElementById("profile-form")
-    ?.addEventListener("submit", (event) => {
-      event.preventDefault();
-
-      const settings = {
-        ...getSettings(),
-        name: document.getElementById("profile-name").value.trim(),
-        course: document.getElementById("profile-course").value.trim(),
-        school: document.getElementById("profile-school").value.trim(),
-        notifications: document.getElementById(
-          "profile-notifications"
-        ).checked,
-      };
-
-      setStorage(STORAGE_KEYS.settings, settings);
-      showToast("Perfil guardado correctamente.");
-      renderCurrentPage();
-    });
+  attachHeaderEvents();
 
   document
-    .getElementById("clear-data-button")
-    ?.addEventListener("click", () => {
-      const confirmed = confirm(
-        "Se borrarán las tareas, configuración y tiempo de estudio. ¿Continuar?"
-      );
+    .getElementById(
+      "profile-form"
+    )
+    ?.addEventListener(
+      "submit",
+      (event) => {
+        event.preventDefault();
 
-      if (!confirmed) return;
+        const name =
+          document
+            .getElementById(
+              "profile-name"
+            )
+            ?.value.trim() ||
+          "Estudiante";
 
-      Object.values(STORAGE_KEYS).forEach((key) => {
-        localStorage.removeItem(key);
-      });
+        const course =
+          document
+            .getElementById(
+              "profile-course"
+            )
+            ?.value.trim() || "";
 
-      showToast("Todos los datos fueron borrados.");
-      renderCurrentPage();
-    });
+        const school =
+          document
+            .getElementById(
+              "profile-school"
+            )
+            ?.value.trim() || "";
+
+        const notifications =
+          document.getElementById(
+            "profile-notifications"
+          )?.checked || false;
+
+        const settings = {
+          ...getSettings(),
+          name,
+          course,
+          school,
+          notifications
+        };
+
+        setStorage(
+          STORAGE_KEYS.settings,
+          settings
+        );
+
+        showToast(
+          "Perfil guardado correctamente."
+        );
+
+        renderCurrentPage();
+      }
+    );
+
+  document
+    .getElementById(
+      "clear-data-button"
+    )
+    ?.addEventListener(
+      "click",
+      () => {
+        const confirmed =
+          window.confirm(
+            "Se borrarán tus tareas, configuración y tiempo de estudio. ¿Continuar?"
+          );
+
+        if (!confirmed) {
+          return;
+        }
+
+        Object.values(
+          STORAGE_KEYS
+        ).forEach((key) => {
+          localStorage.removeItem(
+            key
+          );
+        });
+
+        showToast(
+          "Todos los datos fueron borrados."
+        );
+
+        renderCurrentPage();
+      }
+    );
 }
 
-// ==========================================
+// ======================================================
+// CLASSROOM
+// ======================================================
+
+function saveClassroomLink(subject) {
+  const link = window.prompt(
+    `Pega el enlace de Classroom de ${subject}:`
+  );
+
+  if (!link) {
+    return;
+  }
+
+  if (!isValidHttpUrl(link)) {
+    showToast(
+      "El enlace debe comenzar con http:// o https://"
+    );
+
+    return;
+  }
+
+  const links =
+    getClassroomLinks();
+
+  links[subject] = link;
+
+  setStorage(
+    STORAGE_KEYS.classroomLinks,
+    links
+  );
+
+  showToast(
+    `Enlace de ${subject} guardado.`
+  );
+
+  renderCurrentPage();
+}
+
+// ======================================================
 // NOTIFICACIONES
-// ==========================================
+// ======================================================
 
 async function requestNotifications() {
-  if (!("Notification" in window)) {
-    showToast("Este navegador no permite notificaciones.");
+  if (
+    !("Notification" in window)
+  ) {
+    showToast(
+      "Este navegador no permite notificaciones."
+    );
+
     return;
   }
 
-  if (Notification.permission === "granted") {
+  if (
+    Notification.permission ===
+    "granted"
+  ) {
     sendTestNotification();
     return;
   }
 
-  const permission = await Notification.requestPermission();
+  const permission =
+    await Notification.requestPermission();
 
-  if (permission === "granted") {
+  if (
+    permission === "granted"
+  ) {
     sendTestNotification();
   } else {
-    showToast("No se activaron las notificaciones.");
+    showToast(
+      "No se activaron las notificaciones."
+    );
   }
 }
 
 function sendTestNotification() {
-  const nextActivity = getNextActivity();
+  const nextActivity =
+    getNextActivity();
 
-  new Notification("Black Hold", {
-    body: nextActivity
-      ? `${nextActivity.name} comienza a las ${nextActivity.start}.`
-      : "No tienes más clases programadas para hoy.",
-    icon: "icon-192.png",
-  });
+  new Notification(
+    "Black Hold",
+    {
+      body: nextActivity
+        ? `${nextActivity.name} comienza a las ${nextActivity.start}.`
+        : "No tienes más clases programadas para hoy.",
+      icon: "./icon-192.png"
+    }
+  );
 
-  showToast("Notificaciones activadas.");
+  showToast(
+    "Notificaciones activadas."
+  );
 }
 
-// ==========================================
+// ======================================================
 // SERVICE WORKER
-// ==========================================
+// ======================================================
 
 function registerServiceWorker() {
-  if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => {
-      navigator.serviceWorker
-        .register("./service-worker.js")
-        .catch((error) => {
-          console.error("Error registrando Service Worker:", error);
-        });
-    });
+  if (
+    !("serviceWorker" in navigator)
+  ) {
+    return;
   }
+
+  window.addEventListener(
+    "load",
+    () => {
+      navigator.serviceWorker
+        .register(
+          "./service-worker.js"
+        )
+        .catch((error) => {
+          console.error(
+            "Error al registrar el Service Worker:",
+            error
+          );
+        });
+    }
+  );
 }
 
-// ==========================================
+// ======================================================
 // COMPONENTES AUXILIARES
-// ==========================================
+// ======================================================
 
-function renderEmptyCard(icon, title, message) {
+function renderEmptyCard(
+  icon,
+  title,
+  message
+) {
   return `
     <article class="empty-card">
-      <span class="material-symbols-rounded">${icon}</span>
+      <span class="material-symbols-rounded">
+        ${icon}
+      </span>
 
       <div>
-        <h3>${escapeHTML(title)}</h3>
-        <p>${escapeHTML(message)}</p>
+        <h3>
+          ${escapeHTML(title)}
+        </h3>
+
+        <p>
+          ${escapeHTML(message)}
+        </p>
       </div>
     </article>
   `;
 }
 
 function showToast(message) {
-  const container = document.getElementById("toast-container");
+  const container =
+    document.getElementById(
+      "toast-container"
+    );
 
-  if (!container) return;
+  if (!container) {
+    window.alert(message);
+    return;
+  }
 
-  const toast = document.createElement("div");
+  const toast =
+    document.createElement("div");
+
   toast.className = "app-toast";
   toast.textContent = message;
 
   container.appendChild(toast);
 
   requestAnimationFrame(() => {
-    toast.classList.add("visible");
+    toast.classList.add(
+      "visible"
+    );
   });
 
   setTimeout(() => {
-    toast.classList.remove("visible");
+    toast.classList.remove(
+      "visible"
+    );
 
-    setTimeout(() => toast.remove(), 300);
+    setTimeout(() => {
+      toast.remove();
+    }, 300);
   }, 3000);
 }
 
+function isValidHttpUrl(value) {
+  if (!value) {
+    return false;
+  }
+
+  try {
+    const url = new URL(value);
+
+    return (
+      url.protocol === "http:" ||
+      url.protocol === "https:"
+    );
+  } catch {
+    return false;
+  }
+}
+
 function escapeHTML(value) {
-  return String(value)
+  return String(value ?? "")
     .replaceAll("&", "&amp;")
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;")
@@ -2188,8 +3682,20 @@ function escapeHTML(value) {
     .replaceAll("'", "&#039;");
 }
 
-// ==========================================
-// INICIAR
-// ==========================================
+// ======================================================
+// CERRAR MODAL CON ESCAPE
+// ======================================================
 
-document.addEventListener("DOMContentLoaded", initializeApp);
+document.addEventListener(
+  "keydown",
+  closeTaskModalWithEscape
+);
+
+// ======================================================
+// INICIAR BLACK HOLD
+// ======================================================
+
+document.addEventListener(
+  "DOMContentLoaded",
+  initializeApp
+);
